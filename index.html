@@ -1,314 +1,442 @@
-import React, { useState, useEffect } from 'react';
-import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, collection, addDoc, onSnapshot, query, serverTimestamp } from 'firebase/firestore';
-import { useForm } from 'react-hook-form';
-
-// The following global variables are provided by the hosting environment
-const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : '';
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-// Image assets (using base64 for self-contained code)
-const heroImage = "http://googleusercontent.com/file_content/1";
-const trainerImage = "http://googleusercontent.com/file_content/2";
-
-const App = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [userId, setUserId] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [messages, setMessages] = useState([]);
-    const { register, handleSubmit, reset } = useForm();
-
-    useEffect(() => {
-        const handleAuth = async () => {
-            try {
-                if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken);
-                }
-            } catch (error) {
-                console.error("Error signing in with custom token:", error);
-            }
-        };
-
-        const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setUserId(user.uid);
-                // Listen to new submissions only after auth is ready
-                const q = query(collection(db, `/artifacts/${appId}/users/${user.uid}/submissions`));
-                const unsubscribeSnapshot = onSnapshot(q, (querySnapshot) => {
-                    const newMessages = [];
-                    querySnapshot.forEach((doc) => {
-                        newMessages.push({ id: doc.id, ...doc.data() });
-                    });
-                    setMessages(newMessages);
-                });
-                return unsubscribeSnapshot;
-            } else {
-                setUserId(null);
-            }
-            setLoading(false);
-        });
-
-        handleAuth();
-        return () => unsubscribeAuth();
-    }, []);
-
-    const onSubmit = async (data) => {
-        if (!userId) {
-            console.error("User not authenticated.");
-            alert('Authentication failed. Please try again.');
-            return;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GetFitWithRohit</title>
+    <!-- Use Inter font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fc;
         }
-
-        try {
-            await addDoc(collection(db, `/artifacts/${appId}/users/${userId}/submissions`), {
-                ...data,
-                timestamp: serverTimestamp(),
-            });
-            console.log("Form data submitted successfully to Firestore!");
-            alert('Thank you for your submission!');
-            setIsModalOpen(false);
-            reset();
-        } catch (error) {
-            console.error("Error adding document: ", error);
-            alert('There was an error submitting your form. Please try again.');
+        /* Custom scroll-behavior for smooth scrolling */
+        html {
+            scroll-behavior: smooth;
         }
-    };
+        /* Style the CTA button with a subtle gradient and shadow */
+        .cta-button {
+            background-image: linear-gradient(to right, #22c55e, #10b981);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+        }
+        /* SVG icons */
+        .svg-icon {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        /* Hide mobile menu by default */
+        .mobile-menu {
+            display: none;
+        }
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s linear;
+        }
+        .modal-overlay.show {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal-content {
+            background-color: #111827;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal-overlay.show .modal-content {
+            transform: scale(1);
+        }
+        /* Hero section background image and overlay */
+        .hero-bg {
+            background-image: url('http://googleusercontent.com/file_content/1');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-200">
 
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
+    <!-- Header Section -->
+    <header class="bg-gray-950 sticky top-0 z-50 shadow-md">
+        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" class="text-2xl font-bold text-gray-50">
+                GetFitWithRohit
+            </a>
 
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen bg-gray-950 text-lime-500">
-                <p>Loading...</p>
-            </div>
-        );
-    }
+            <!-- Desktop Navigation -->
+            <ul class="hidden md:flex space-x-8 text-lg font-medium">
+                <li><a href="#home" class="hover:text-lime-500 transition-colors duration-200">Home</a></li>
+                <li><a href="#features" class="hover:text-lime-500 transition-colors duration-200">Features</a></li>
+                <li><a href="#about" class="hover:text-lime-500 transition-colors duration-200">Trainer</a></li>
+                <li><a href="#pricing" class="hover:text-lime-500 transition-colors duration-200">Pricing</a></li>
+                <li><a href="#contact" class="hover:text-lime-500 transition-colors duration-200">Contact</a></li>
+            </ul>
 
-    const navigation = [
-        { name: 'Home', href: '#home' },
-        { name: 'Features', href: '#features' },
-        { name: 'Trainer', href: '#about' },
-        { name: 'Pricing', href: '#pricing' },
-        { name: 'Contact', href: '#contact' },
-    ];
+            <!-- Mobile Menu Button (Hamburger) -->
+            <button id="mobile-menu-button" class="md:hidden p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-lime-500">
+                <svg class="svg-icon w-6 h-6" viewBox="0 0 24 24" stroke="#e2e8f0" fill="none">
+                    <path d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </nav>
 
-    return (
-        <div className="bg-gray-950 text-gray-200">
-            {/* Header Section */}
-            <header className="bg-gray-950 sticky top-0 z-50 shadow-md">
-                <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
-                    <a href="#" className="text-2xl font-bold text-gray-50">GetFitWithRohit</a>
-                    <ul className="hidden md:flex space-x-8 text-lg font-medium">
-                        {navigation.map((item) => (
-                            <li key={item.name}><a href={item.href} className="hover:text-lime-500 transition-colors duration-200">{item.name}</a></li>
-                        ))}
-                    </ul>
-                    <button id="mobile-menu-button" className="md:hidden p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-lime-500">
-                        <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                    </button>
-                </nav>
-            </header>
-
-            <main>
-                {/* Hero Section */}
-                <section id="home" className="relative hero-bg py-24 md:py-32 text-center text-white">
-                    <div className="absolute inset-0 bg-black/50"></div>
-                    <div className="container mx-auto px-4 relative z-10">
-                        <h1 className="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4">Unlock Your Potential</h1>
-                        <a href="#features" className="inline-block bg-lime-500 text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-lime-400 transition-all duration-300 mt-6">Discover Our Programs</a>
-                    </div>
-                </section>
-
-                {/* Features Section */}
-                <section id="features" className="py-20 md:py-28 bg-gray-900">
-                    <div className="container mx-auto px-4">
-                        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-white">Why Choose Our Training</h2>
-                        <p className="text-center text-gray-400 max-w-xl mx-auto mb-12">We're committed to providing the best tools and support for your fitness journey.</p>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                            <div className="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 hover:scale-105 transition-transform duration-300">
-                                <div className="text-lime-500 mb-4 text-center">
-                                    <svg className="w-12 h-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                                </div>
-                                <h3 className="text-xl font-semibold mb-2 text-white text-center">Personalized Plans</h3>
-                                <p className="text-gray-400 text-center">Get a custom workout and nutrition plan designed specifically for your body and your goals.</p>
-                            </div>
-                            <div className="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 hover:scale-105 transition-transform duration-300">
-                                <div className="text-lime-500 mb-4 text-center">
-                                    <svg className="w-12 h-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M17 11h.01"></path></svg>
-                                </div>
-                                <h3 className="text-xl font-semibold mb-2 text-white text-center">Calisthenics Training</h3>
-                                <p className="text-gray-400 text-center">Master bodyweight exercises and build incredible functional strength with our specialized calisthenics programs.</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                {/* About the Trainer Section */}
-                <section id="about" className="py-20 md:py-28 bg-gray-950">
-                    <div className="container mx-auto px-4 text-center">
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Meet Your Trainer</h2>
-                        <div className="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-12">
-                            <div className="w-64 h-64 rounded-full overflow-hidden border-4 border-lime-500 shadow-xl flex-shrink-0">
-                                <img src={trainerImage} alt="Trainer Rohit" className="w-full h-full object-cover"/>
-                            </div>
-                            <div className="md:w-1/2 text-left">
-                                <p className="text-gray-300">I am Rohit, a certified fitness trainer with a deep passion for calisthenics and personalized fitness. My journey began with a simple goal: to help people unlock their full potential and achieve a healthier, stronger body through functional training.</p>
-                                <p className="mt-4 text-gray-300">I specialize in crafting personalized workout and nutrition plans that are tailored to your unique needs and goals. Whether you're a beginner looking to build a foundation or an athlete aiming to master bodyweight movements, I am here to guide you every step of the way.</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Pricing Section */}
-                <section id="pricing" className="py-20 md:py-28 bg-gray-900">
-                    <div className="container mx-auto px-4 text-center">
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Choose Your Personal Training Plan</h2>
-                        <p className="text-center text-gray-400 max-w-xl mx-auto mb-12">Find the perfect plan to kickstart your journey.</p>
-                        <div className="flex flex-col md:flex-row justify-center items-center md:space-x-8 space-y-8 md:space-y-0">
-                            <div className="bg-gray-800 p-8 rounded-xl shadow-lg w-full md:w-1/3 border border-gray-700 transform hover:scale-105 transition-transform duration-300">
-                                <h3 className="text-2xl font-bold mb-2 text-white">Starter Pack</h3>
-                                <p className="text-gray-400 mb-6">For beginners getting started</p>
-                                <div className="text-5xl font-extrabold text-white mb-2">₹1000<span className="text-xl font-medium text-gray-400">/mo</span></div>
-                                <ul className="text-left space-y-3 text-gray-400 mb-8">
-                                    <li className="flex items-center"><svg className="h-4 w-4 text-lime-500 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"></path></svg> 4 Sessions/Month</li>
-                                    <li className="flex items-center"><svg className="h-4 w-4 text-lime-500 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"></path></svg> Basic Workout Plan</li>
-                                    <li className="flex items-center"><svg className="h-4 w-4 text-lime-500 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"></path></svg> Email Support</li>
-                                </ul>
-                                <button onClick={openModal} className="w-full bg-lime-500 text-gray-900 py-3 rounded-full font-bold transition-all duration-300 hover:bg-lime-400">GET IT</button>
-                            </div>
-                            <div className="bg-gray-700 text-white p-8 rounded-xl shadow-2xl w-full md:w-1/3 border border-lime-500 transform hover:scale-105 transition-transform duration-300 scale-100 md:scale-105">
-                                <h3 className="text-2xl font-bold mb-2">Advanced Training</h3>
-                                <p className="text-gray-300 mb-6">For committed individuals</p>
-                                <div className="text-5xl font-extrabold mb-2 text-lime-500">₹2000<span className="text-xl font-medium text-gray-300">/mo</span></div>
-                                <ul className="text-left space-y-3 text-gray-300 mb-8">
-                                    <li className="flex items-center"><svg className="h-4 w-4 text-lime-500 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"></path></svg> 8 Sessions/Month</li>
-                                    <li className="flex items-center"><svg className="h-4 w-4 text-lime-500 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"></path></svg> Personalized Workout Plan</li>
-                                    <li className="flex items-center"><svg className="h-4 w-4 text-lime-500 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"></path></svg> Nutrition Guidance</li>
-                                    <li className="flex items-center"><svg className="h-4 w-4 text-lime-500 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"></path></svg> Priority Support</li>
-                                </ul>
-                                <button onClick={openModal} className="w-full bg-lime-500 text-gray-900 py-3 rounded-full font-bold transition-all duration-300 hover:bg-lime-400">GET IT</button>
-                            </div>
-                            <div className="bg-gray-800 p-8 rounded-xl shadow-lg w-full md:w-1/3 border border-gray-700 transform hover:scale-105 transition-transform duration-300">
-                                <h3 className="text-2xl font-bold mb-2 text-white">Small Group Training</h3>
-                                <p className="text-gray-400 mb-6">For corporate and group training</p>
-                                <div className="text-5xl font-extrabold text-white mb-2">₹3000<span className="text-xl font-medium text-gray-400">/mo</span></div>
-                                <ul className="text-left space-y-3 text-gray-400 mb-8">
-                                    <li className="flex items-center"><svg className="h-4 w-4 text-lime-500 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"></path></svg> Up to 5 people</li>
-                                    <li className="flex items-center"><svg className="h-4 w-4 text-lime-500 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"></path></svg> Customized Group Plan</li>
-                                    <li className="flex items-center"><svg className="h-4 w-4 text-lime-500 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"></path></svg> Dedicated Group Coach</li>
-                                </ul>
-                                <button onClick={openModal} className="w-full bg-lime-500 text-gray-900 py-3 rounded-full font-bold transition-all duration-300 hover:bg-lime-400">GET IT</button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Call to Action Section */}
-                <section id="contact" className="bg-lime-500 text-gray-900 py-16">
-                    <div className="container mx-auto px-4 text-center">
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Start Your Journey?</h2>
-                        <p className="text-lg text-gray-700 max-w-xl mx-auto mb-8">Join our community and transform your life with the support of our expert trainers.</p>
-                        <div className="flex flex-col items-center space-y-4">
-                            <a href="mailto:rohitvinod29@gmail.com" className="flex items-center text-gray-900 font-bold hover:text-gray-700 transition-colors duration-200">
-                                <svg className="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                                rohitvinod29@gmail.com
-                            </a>
-                            <a href="tel:+919567434602" className="flex items-center text-gray-900 font-bold hover:text-gray-700 transition-colors duration-200">
-                                <svg className="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M22 16.92v3a2 2 0 01-2 2h-11a2 2 0 01-2-2v-3a2 2 0 012-2h11a2 2 0 012 2z"></path><path d="M11 5a2 2 0 012-2h10a2 2 0 012 2v3a2 2 0 01-2 2h-10a2 2 0 01-2-2V5z"></path></svg>
-                                +91 9567434602
-                            </a>
-                            <a href="https://instagram.com/rohit__vinod" target="_blank" className="flex items-center text-gray-900 font-bold hover:text-gray-700 transition-colors duration-200">
-                                <svg className="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37a4 4 0 11-8 0 4 4 0 018 0z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                                @rohit__vinod
-                            </a>
-                        </div>
-                    </div>
-                </section>
-            </main>
-
-            {/* Modal for the contact form */}
-            <div id="contact-modal" className={`modal-overlay ${isModalOpen ? 'show' : ''}`}>
-                <div className="modal-content">
-                    <div className="flex justify-between items-center mb-6">
-                        <h3 className="text-2xl font-bold text-white">Get in Touch</h3>
-                        <button onClick={closeModal} className="text-gray-400 hover:text-white transition-colors duration-200">
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                        </button>
-                    </div>
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                        <div>
-                            <label htmlFor="name" className="block text-sm font-medium text-gray-300">Name</label>
-                            <input type="text" id="name" {...register('name', { required: true })} className="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50" />
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label htmlFor="age" className="block text-sm font-medium text-gray-300">Age</label>
-                                <input type="number" id="age" {...register('age', { required: true })} className="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50" />
-                            </div>
-                            <div>
-                                <label htmlFor="height" className="block text-sm font-medium text-gray-300">Height (cm)</label>
-                                <input type="number" id="height" {...register('height', { required: true })} className="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50" />
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label htmlFor="weight" className="block text-sm font-medium text-gray-300">Weight (kg)</label>
-                                <input type="number" id="weight" {...register('weight', { required: true })} className="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50" />
-                            </div>
-                            <div>
-                                <label htmlFor="profession" className="block text-sm font-medium text-gray-300">Profession</label>
-                                <input type="text" id="profession" {...register('profession', { required: true })} className="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50" />
-                            </div>
-                        </div>
-                        <div>
-                            <label htmlFor="address" className="block text-sm font-medium text-gray-300">Address</label>
-                            <textarea id="address" {...register('address', { required: true })} rows="2" className="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50" />
-                        </div>
-                        <div>
-                            <label htmlFor="goal" className="block text-sm font-medium text-gray-300">Fitness Goal</label>
-                            <select id="goal" {...register('goal', { required: true })} className="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50">
-                                <option value="">Select a goal</option>
-                                <option value="Fat Loss">Fat Loss</option>
-                                <option value="Muscle Gain">Muscle Gain</option>
-                                <option value="CrossFit">CrossFit</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <button type="submit" className="w-full bg-lime-500 text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-lime-400 transition-all duration-300">Submit Details</button>
-                    </form>
-                    {/* Message box for success/error */}
-                    <div id="message-box" className="mt-4 p-4 rounded-md text-sm hidden"></div>
-                </div>
-            </div>
-
-            {/* Footer Section */}
-            <footer className="bg-gray-950 text-gray-300 py-12">
-                <div className="container mx-auto px-4 text-center">
-                    <p className="text-sm">&copy; 2025 GetFitWithRohit. All Rights Reserved.</p>
-                    <div className="flex justify-center space-x-6 mt-4">
-                        <a href="#" className="hover:text-white transition-colors duration-200">
-                            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 6.5c-0.8 0.4-1.6 0.7-2.4 0.9 0.9-0.6 1.6-1.5 1.9-2.6-0.9 0.5-1.9 0.9-3 1.1-0.9-0.9-2.2-1.5-3.6-1.5-2.7 0-4.9 2.2-4.9 4.9 0 0.4 0.1 0.8 0.1 1.2-4.1-0.2-7.7-2.2-10.1-5.2-0.4 0.8-0.6 1.7-0.6 2.7 0 1.7 0.9 3.2 2.2 4.1-0.8-0.03-1.6-0.2-2.3-0.6v0.1c0 2.4 1.7 4.4 4 4.8-0.4 0.1-0.9 0.2-1.4 0.2-0.3 0-0.7-0.03-1-0.1 0.6 2 2.5 3.5 4.7 3.5-1.7 1.3-3.8 2.1-6.1 2.1-0.4 0-0.8-0.02-1.1-0.1 2.2 1.4 4.8 2.2 7.6 2.2 9.2 0 14.3-7.7 14.3-14.3 0-0.2 0-0.5-0.01-0.7 1-0.7 1.9-1.5 2.6-2.5z"></path></svg>
-                        </a>
-                        <a href="#" className="hover:text-white transition-colors duration-200">
-                            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12c0 6.627 5.373 12 12 12s12-5.373 12-12c0-6.627-5.373-12-12-12zm4.18 17.51c0 0.22-0.01 0.43-0.03 0.64-0.15 0.94-0.6 1.76-1.25 2.37-0.6 0.61-1.41 1.05-2.35 1.2-0.96 0.15-1.96-0.03-2.88-0.54-0.92-0.5-1.63-1.26-2.1-2.22-0.47-0.96-0.68-2.04-0.63-3.13 0.05-1.09 0.43-2.14 1.14-3.04 0.72-0.9 1.66-1.55 2.72-1.9 1.05-0.35 2.15-0.44 3.24-0.24s2.06 0.73 2.87 1.66c0.81 0.93 1.36 2.06 1.54 3.26l-3.32 0.01c-0.1-0.64-0.4-1.25-0.89-1.72-0.49-0.47-1.11-0.75-1.78-0.83-0.67-0.08-1.35 0.06-1.96 0.43-0.61 0.37-1.11 0.92-1.42 1.59-0.31 0.67-0.42 1.41-0.31 2.13 0.11 0.72 0.44 1.39 0.95 1.93 0.51 0.54 1.15 0.94 1.85 1.16 0.71 0.22 1.45 0.25 2.16 0.09 0.7-0.16 1.35-0.51 1.88-0.99l0.02-0.02c0.05-0.05 0.09-0.1 0.14-0.16zM12 2.08c-5.46 0-9.92 4.46-9.92 9.92s4.46 9.92 9.92 9.92 9.92-4.46 9.92-9.92-4.46-9.92-9.92-9.92zm-0.03 2.5c4.1 0 7.42 3.32 7.42 7.42s-3.32 7.42-7.42 7.42-7.42-3.32-7.42-7.42 3.32-7.42 7.42-7.42z"></path></svg>
-                        </a>
-                        <a href="#" className="hover:text-white transition-colors duration-200">
-                            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16.5h-2v-7h2v7zm-2-8.5c-0.828 0-1.5-0.672-1.5-1.5s0.672-1.5 1.5-1.5 1.5 0.672 1.5 1.5-0.672 1.5-1.5 1.5zm11 8.5h-2v-4.5c0-1.155-0.945-2-2-2s-2 0.845-2 2v4.5h-2v-7h2v1.1c0.697-0.817 1.764-1.3 2.9-1.3 2.023 0 3.1 1.611 3.1 3.738v3.462z"></path></svg>
-                        </a>
-                    </div>
-                </div>
-            </footer>
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="mobile-menu md:hidden bg-gray-900 shadow-md rounded-b-xl pb-4">
+            <ul class="flex flex-col items-center space-y-4 text-lg font-medium pt-4">
+                <li><a href="#home" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Home</a></li>
+                <li><a href="#features" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Features</a></li>
+                <li><a href="#about" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Trainer</a></li>
+                <li><a href="#pricing" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Pricing</a></li>
+                <li><a href="#contact" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Contact</a></li>
+            </ul>
         </div>
-    );
-};
+    </header>
 
-export default App;
+    <!-- Hero Section -->
+    <main>
+        <section id="home" class="relative hero-bg py-24 md:py-32 text-center text-white">
+            <!-- Overlay to darken image and improve text readability -->
+            <div class="absolute inset-0 bg-black/50"></div>
+            <div class="container mx-auto px-4 relative z-10">
+                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4">
+                    Unlock Your Potential
+                </h1>
+                <a href="#features" class="inline-block cta-button text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 mt-6">
+                    Discover Our Programs
+                </a>
+            </div>
+        </section>
 
+        <!-- Features Section -->
+        <section id="features" class="py-20 md:py-28 bg-gray-900">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-white">
+                    Why Choose Our Training
+                </h2>
+                <p class="text-center text-gray-400 max-w-xl mx-auto mb-12">
+                    We're committed to providing the best tools and support for your fitness journey.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <!-- Feature Card 1: Personalized Plans -->
+                    <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 hover:scale-105 transition-transform duration-300">
+                        <div class="text-lime-500 mb-4">
+                            <svg class="w-12 h-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-white text-center">Personalized Plans</h3>
+                        <p class="text-gray-400 text-center">
+                            Get a custom workout and nutrition plan designed specifically for your body and your goals.
+                        </p>
+                    </div>
+
+                    <!-- Feature Card 2: Calisthenics Training -->
+                    <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 hover:scale-105 transition-transform duration-300">
+                        <div class="text-lime-500 mb-4">
+                             <svg class="w-12 h-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M17 11h.01"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2 text-white text-center">Calisthenics Training</h3>
+                        <p class="text-gray-400 text-center">
+                            Master bodyweight exercises and build incredible functional strength with our specialized calisthenics programs.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About the Trainer Section -->
+        <section id="about" class="py-20 md:py-28 bg-gray-950">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">
+                    Meet Your Trainer
+                </h2>
+                <div class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-12">
+                    <div class="w-64 h-64 rounded-full overflow-hidden border-4 border-lime-500 shadow-xl flex-shrink-0">
+                        <img src="http://googleusercontent.com/file_content/2" alt="Trainer Rohit" class="w-full h-full object-cover">
+                    </div>
+                    <div class="md:w-1/2 text-left">
+                        <p class="text-gray-300">
+                            I am Rohit, a certified fitness trainer with a deep passion for calisthenics and personalized fitness. My journey began with a simple goal: to help people unlock their full potential and achieve a healthier, stronger body through functional training.
+                        </p>
+                        <p class="mt-4 text-gray-300">
+                            I specialize in crafting personalized workout and nutrition plans that are tailored to your unique needs and goals. Whether you're a beginner looking to build a foundation or an athlete aiming to master bodyweight movements, I am here to guide you every step of the way.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="py-20 md:py-28 bg-gray-900">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">
+                    Choose Your Personal Training Plan
+                </h2>
+                <p class="text-center text-gray-400 max-w-xl mx-auto mb-12">
+                    Find the perfect plan to kickstart your journey.
+                </p>
+
+                <div class="flex flex-col md:flex-row justify-center items-center md:space-x-8 space-y-8 md:space-y-0">
+                    <!-- Pricing Card 1 -->
+                    <div class="bg-gray-800 p-8 rounded-xl shadow-lg w-full md:w-1/3 border border-gray-700 transform hover:scale-105 transition-transform duration-300">
+                        <h3 class="text-2xl font-bold mb-2 text-white">Starter Pack</h3>
+                        <p class="text-gray-400 mb-6">For beginners getting started</p>
+                        <div class="text-5xl font-extrabold text-white mb-2">₹1000<span class="text-xl font-medium text-gray-400">/mo</span></div>
+                        <ul class="text-left space-y-3 text-gray-400 mb-8">
+                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> 4 Sessions/Month</li>
+                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Basic Workout Plan</li>
+                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Email Support</li>
+                        </ul>
+                        <button class="open-modal w-full cta-button text-gray-900 py-3 rounded-full font-bold">GET IT</button>
+                    </div>
+
+                    <!-- Pricing Card 2 (Featured) -->
+                    <div class="bg-gray-700 text-white p-8 rounded-xl shadow-2xl w-full md:w-1/3 border border-lime-500 transform hover:scale-105 transition-transform duration-300 scale-100 md:scale-105">
+                        <h3 class="text-2xl font-bold mb-2">Advanced Training</h3>
+                        <p class="text-gray-300 mb-6">For committed individuals</p>
+                        <div class="text-5xl font-extrabold mb-2 text-lime-500">₹2000<span class="text-xl font-medium text-gray-300">/mo</span></div>
+                        <ul class="text-left space-y-3 text-gray-300 mb-8">
+                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> 8 Sessions/Month</li>
+                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Personalized Workout Plan</li>
+                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Nutrition Guidance</li>
+                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Priority Support</li>
+                        </ul>
+                        <button class="open-modal w-full bg-lime-500 text-gray-900 py-3 rounded-full font-bold cta-button">GET IT</button>
+                    </div>
+
+                    <!-- Pricing Card 3 -->
+                    <div class="bg-gray-800 p-8 rounded-xl shadow-lg w-full md:w-1/3 border border-gray-700 transform hover:scale-105 transition-transform duration-300">
+                        <h3 class="text-2xl font-bold mb-2 text-white">Small Group Training</h3>
+                        <p class="text-gray-400 mb-6">For corporate and group training</p>
+                        <div class="text-5xl font-extrabold text-white mb-2">₹3000<span class="text-xl font-medium text-gray-400">/mo</span></div>
+                        <ul class="text-left space-y-3 text-gray-400 mb-8">
+                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Up to 5 people</li>
+                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Customized Group Plan</li>
+                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Dedicated Group Coach</li>
+                        </ul>
+                        <button class="open-modal w-full cta-button text-gray-900 py-3 rounded-full font-bold">GET IT</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section id="contact" class="bg-lime-500 text-gray-900 py-16">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                    Ready to Start Your Journey?
+                </h2>
+                <p class="text-lg text-gray-700 max-w-xl mx-auto mb-8">
+                    Join our community and transform your life with the support of our expert trainers.
+                </p>
+                <!-- New contact details with icons -->
+                <div class="flex flex-col items-center space-y-4">
+                    <!-- Email -->
+                    <a href="mailto:rohitvinod29@gmail.com" class="flex items-center text-gray-900 font-bold hover:text-gray-700 transition-colors duration-200">
+                        <svg class="svg-icon w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        rohitvinod29@gmail.com
+                    </a>
+                    <!-- Phone -->
+                    <a href="tel:+919567434602" class="flex items-center text-gray-900 font-bold hover:text-gray-700 transition-colors duration-200">
+                        <svg class="svg-icon w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2 2h-11a2 2 0 01-2-2v-3a2 2 0 012-2h11a2 2 0 012 2z"></path><path d="M11 5a2 2 0 012-2h10a2 2 0 012 2v3a2 2 0 01-2 2h-10a2 2 0 01-2-2V5z"></path></svg>
+                        +91 9567434602
+                    </a>
+                    <!-- Instagram -->
+                    <a href="https://instagram.com/rohit__vinod" target="_blank" class="flex items-center text-gray-900 font-bold hover:text-gray-700 transition-colors duration-200">
+                        <svg class="svg-icon w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37a4 4 0 11-8 0 4 4 0 018 0z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                        @rohit__vinod
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal for the contact form -->
+    <div id="contact-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-white">Get in Touch</h3>
+                <button id="close-modal" class="text-gray-400 hover:text-white transition-colors duration-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <form id="contact-form" class="space-y-4">
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-300">Name</label>
+                    <input type="text" id="name" name="name" required class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="age" class="block text-sm font-medium text-gray-300">Age</label>
+                        <input type="number" id="age" name="age" required class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50">
+                    </div>
+                    <div>
+                        <label for="height" class="block text-sm font-medium text-gray-300">Height (cm)</label>
+                        <input type="number" id="height" name="height" required class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="weight" class="block text-sm font-medium text-gray-300">Weight (kg)</label>
+                        <input type="number" id="weight" name="weight" required class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50">
+                    </div>
+                    <div>
+                        <label for="profession" class="block text-sm font-medium text-gray-300">Profession</label>
+                        <input type="text" id="profession" name="profession" required class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50">
+                    </div>
+                </div>
+                <div>
+                    <label for="address" class="block text-sm font-medium text-gray-300">Address</label>
+                    <textarea id="address" name="address" rows="2" required class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50"></textarea>
+                </div>
+                <div>
+                    <label for="goal" class="block text-sm font-medium text-gray-300">Fitness Goal</label>
+                    <select id="goal" name="goal" required class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50">
+                        <option value="">Select a goal</option>
+                        <option value="Fat Loss">Fat Loss</option>
+                        <option value="Muscle Gain">Muscle Gain</option>
+                        <option value="CrossFit">CrossFit</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full cta-button text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
+                    Submit Details
+                </button>
+            </form>
+            <!-- Message box for success/error -->
+            <div id="message-box" class="mt-4 p-4 rounded-md text-sm hidden"></div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-950 text-gray-300 py-12">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-sm">&copy; 2025 GetFitWithRohit. All Rights Reserved.</p>
+            <div class="flex justify-center space-x-6 mt-4">
+                <!-- Social Media Icons (placeholders) -->
+                <a href="#" class="hover:text-white transition-colors duration-200">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M22 6.5c-0.8 0.4-1.6 0.7-2.4 0.9 0.9-0.6 1.6-1.5 1.9-2.6-0.9 0.5-1.9 0.9-3 1.1-0.9-0.9-2.2-1.5-3.6-1.5-2.7 0-4.9 2.2-4.9 4.9 0 0.4 0.1 0.8 0.1 1.2-4.1-0.2-7.7-2.2-10.1-5.2-0.4 0.8-0.6 1.7-0.6 2.7 0 1.7 0.9 3.2 2.2 4.1-0.8-0.03-1.6-0.2-2.3-0.6v0.1c0 2.4 1.7 4.4 4 4.8-0.4 0.1-0.9 0.2-1.4 0.2-0.3 0-0.7-0.03-1-0.1 0.6 2 2.5 3.5 4.7 3.5-1.7 1.3-3.8 2.1-6.1 2.1-0.4 0-0.8-0.02-1.1-0.1 2.2 1.4 4.8 2.2 7.6 2.2 9.2 0 14.3-7.7 14.3-14.3 0-0.2 0-0.5-0.01-0.7 1-0.7 1.9-1.5 2.6-2.5z"></path>
+                    </svg>
+                </a>
+                <a href="#" class="hover:text-white transition-colors duration-200">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 0C5.373 0 0 5.373 0 12c0 6.627 5.373 12 12 12s12-5.373 12-12c0-6.627-5.373-12-12-12zm4.18 17.51c0 0.22-0.01 0.43-0.03 0.64-0.15 0.94-0.6 1.76-1.25 2.37-0.6 0.61-1.41 1.05-2.35 1.2-0.96 0.15-1.96-0.03-2.88-0.54-0.92-0.5-1.63-1.26-2.1-2.22-0.47-0.96-0.68-2.04-0.63-3.13 0.05-1.09 0.43-2.14 1.14-3.04 0.72-0.9 1.66-1.55 2.72-1.9 1.05-0.35 2.15-0.44 3.24-0.24s2.06 0.73 2.87 1.66c0.81 0.93 1.36 2.06 1.54 3.26l-3.32 0.01c-0.1-0.64-0.4-1.25-0.89-1.72-0.49-0.47-1.11-0.75-1.78-0.83-0.67-0.08-1.35 0.06-1.96 0.43-0.61 0.37-1.11 0.92-1.42 1.59-0.31 0.67-0.42 1.41-0.31 2.13 0.11 0.72 0.44 1.39 0.95 1.93 0.51 0.54 1.15 0.94 1.85 1.16 0.71 0.22 1.45 0.25 2.16 0.09 0.7-0.16 1.35-0.51 1.88-0.99l0.02-0.02c0.05-0.05 0.09-0.1 0.14-0.16zM12 2.08c-5.46 0-9.92 4.46-9.92 9.92s4.46 9.92 9.92 9.92 9.92-4.46 9.92-9.92-4.46-9.92-9.92-9.92zm-0.03 2.5c4.1 0 7.42 3.32 7.42 7.42s-3.32 7.42-7.42 7.42-7.42-3.32-7.42-7.42 3.32-7.42 7.42-7.42z"></path>
+                    </svg>
+                </a>
+                <a href="#" class="hover:text-white transition-colors duration-200">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16.5h-2v-7h2v7zm-2-8.5c-0.828 0-1.5-0.672-1.5-1.5s0.672-1.5 1.5-1.5 1.5 0.672 1.5 1.5-0.672 1.5-1.5 1.5zm11 8.5h-2v-4.5c0-1.155-0.945-2-2-2s-2 0.845-2 2v4.5h-2v-7h2v1.1c0.697-0.817 1.764-1.3 2.9-1.3 2.023 0 3.1 1.611 3.1 3.738v3.462z"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu and Smooth Scrolling and Modal -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile Menu functionality
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.style.display = mobileMenu.style.display === 'block' ? 'none' : 'block';
+            });
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    if (mobileMenu.style.display === 'block') {
+                        mobileMenu.style.display = 'none';
+                    }
+                });
+            });
+
+            // Modal functionality
+            const modalOverlay = document.getElementById('contact-modal');
+            const closeModalButton = document.getElementById('close-modal');
+            const openModalButtons = document.querySelectorAll('.open-modal');
+            const contactForm = document.getElementById('contact-form');
+            const messageBox = document.getElementById('message-box');
+
+            // Function to show the modal
+            openModalButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    modalOverlay.classList.add('show');
+                });
+            });
+
+            // Function to hide the modal
+            closeModalButton.addEventListener('click', () => {
+                modalOverlay.classList.remove('show');
+                messageBox.classList.add('hidden');
+            });
+
+            // Close modal when clicking outside the content
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) {
+                    modalOverlay.classList.remove('show');
+                    messageBox.classList.add('hidden');
+                }
+            });
+
+            // Handle form submission
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(contactForm);
+                const data = Object.fromEntries(formData.entries());
+                
+                // Log the data to the console
+                console.log('Submitted Form Data:', data);
+                
+                // Show a success message
+                messageBox.textContent = 'Thank you! Your details have been submitted. I will get in touch with you shortly.';
+                messageBox.classList.remove('hidden');
+                messageBox.classList.add('bg-green-700', 'text-white');
+                
+                // Reset the form after submission
+                contactForm.reset();
+            });
+        });
+    </script>
+</body>
+</html>
+s
