@@ -8,7 +8,67 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        .hero-bg {
+            background-image: url('https://images.unsplash.com/photo-1549060278-f7c7562215c9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .cta-button {
+            background-color: #a3e635; /* Lime-500 equivalent */
+        }
+
+        .cta-button:hover {
+            background-color: #84cc16; /* Lime-600 equivalent */
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .modal-content {
+            background-color: #1f2937; /* Gray-800 equivalent */
+            padding: 2.5rem;
+            border-radius: 1rem;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transform: scale(0.9);
+            animation: modal-pop 0.3s forwards;
+        }
+
+        @keyframes modal-pop {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .modal-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .mobile-menu {
+            transition: max-height 0.3s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        
+        .mobile-menu.active {
+            max-height: 500px; /* Adjust as needed */
+        }
+    </style>
 </head>
 <body class="bg-gray-950 text-gray-200">
 
@@ -274,50 +334,52 @@
     </footer>
 
     <script>
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
 
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('active');
+            });
 
-        const contactModal = document.getElementById('contact-modal');
-        const openModalButtons = document.querySelectorAll('.open-modal');
-        const closeModalButton = document.getElementById('close-modal');
-        const contactForm = document.getElementById('contact-form');
-        const messageBox = document.getElementById('message-box');
+            const contactModal = document.getElementById('contact-modal');
+            const openModalButtons = document.querySelectorAll('.open-modal');
+            const closeModalButton = document.getElementById('close-modal');
+            const contactForm = document.getElementById('contact-form');
+            const messageBox = document.getElementById('message-box');
 
-        function openModal() {
-            contactModal.classList.remove('hidden');
-        }
-
-        openModalButtons.forEach(button => {
-            button.addEventListener('click', openModal);
-        });
-
-        closeModalButton.addEventListener('click', () => {
-            contactModal.classList.add('hidden');
-        });
-
-        window.addEventListener('click', (event) => {
-            if (event.target === contactModal) {
-                contactModal.classList.add('hidden');
+            function openModal() {
+                contactModal.classList.remove('hidden');
             }
-        });
 
-        contactForm.addEventListener('submit', function(event) {
-            event.preventDefault();
+            openModalButtons.forEach(button => {
+                button.addEventListener('click', openModal);
+            });
 
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData.entries());
+            closeModalButton.addEventListener('click', () => {
+                contactModal.classList.add('hidden');
+            });
 
-            console.log('Form Submitted:', data);
+            window.addEventListener('click', (event) => {
+                if (event.target === contactModal) {
+                    contactModal.classList.add('hidden');
+                }
+            });
 
-            messageBox.textContent = 'Thank you! Your details have been submitted. Rohit will contact you shortly.';
-            messageBox.classList.remove('hidden', 'bg-red-500/20', 'text-red-300');
-            messageBox.classList.add('bg-lime-500/20', 'text-lime-300');
-            
-            this.reset();
+            contactForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData.entries());
+
+                console.log('Form Submitted:', data);
+
+                messageBox.textContent = 'Thank you! Your details have been submitted. Rohit will contact you shortly.';
+                messageBox.classList.remove('hidden', 'bg-red-500/20', 'text-red-300');
+                messageBox.classList.add('bg-lime-500/20', 'text-lime-300');
+                
+                this.reset();
+            });
         });
     </script>
 </body>
