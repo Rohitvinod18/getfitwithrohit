@@ -430,7 +430,7 @@
             });
 
             // Typing Effect Logic
-            const aboutSection = document.getElementById('about');
+            const trainerBioContainer = document.getElementById('trainer-bio-container');
             const observerTyping = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -442,7 +442,7 @@
                 threshold: 0.5
             });
 
-            observerTyping.observe(aboutSection);
+            observerTyping.observe(trainerBioContainer);
             
             function startTypingAnimation() {
                 const typingText1 = document.getElementById('typing-text');
