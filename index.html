@@ -95,15 +95,15 @@
             overflow: hidden;
         }
 
-        /* --- Optimized Animation: Pop and Zoom --- */
+        /* --- More Animated Pop and Zoom --- */
         .pop-on-hover {
-            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55), box-shadow 0.3s ease-in-out;
+            transition: transform 0.2s cubic-bezier(0.68, -0.55, 0.27, 1.55), box-shadow 0.2s ease-in-out;
             cursor: pointer;
         }
         
         .pop-on-hover:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+            transform: scale(1.07);
+            box-shadow: 0 18px 30px rgba(0, 0, 0, 0.35);
         }
     </style>
 </head>
@@ -639,7 +639,7 @@
                     { title: 'Pull Day', exercises: ['Pull-ups', 'Chin-ups', 'Australian Pull-ups', 'Hanging Leg Raises'] },
                     { title: 'Legs Day', exercises: ['Pistol Squats', 'Bulgarian Split Squats', 'Jumping Lunges', 'Sissy Squats'] }
                 ];
-                showWorkoutModal('Calisthenics Training', 'Master your bodyweight with our functional training programs. Build incredible strength and a lean physique without any gym equipment.', bodyweightWorkout);
+                showWorkoutModal('Calisthenics Training', 'Master your bodyweight with our functional training programs. Build incredible functional strength with our specialized calisthenics programs.', bodyweightWorkout);
             });
 
             closeWorkoutModalButton.addEventListener('click', () => closeModal(workoutModal));
@@ -670,6 +670,8 @@
             }
             
             // Form Submission Logic
+            const contactForm = document.getElementById('contact-form');
+            const messageBox = document.getElementById('message-box');
             contactForm.addEventListener('submit', function(event) {
                 event.preventDefault();
                 messageBox.textContent = 'Submitting your details...';
