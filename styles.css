@@ -1,0 +1,80 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f7f9fc;
+}
+
+/* Custom scroll-behavior for smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Style the CTA button with a subtle gradient and shadow */
+.cta-button {
+    background-image: linear-gradient(to right, #22c55e, #10b981);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+}
+
+/* SVG icons */
+.svg-icon {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Hide mobile menu by default */
+.mobile-menu {
+    display: none;
+}
+
+/* Modal styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.3s linear;
+}
+
+.modal-overlay.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: #111827;
+    padding: 2.5rem;
+    border-radius: 1rem;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    transform: scale(0.9);
+    transition: transform 0.3s ease-in-out;
+}
+
+.modal-overlay.show .modal-content {
+    transform: scale(1);
+}
+
+/* Hero section background image and overlay */
+.hero-bg {
+    background-image: url('http://googleusercontent.com/file_content/1');
+    background-size: cover;
+    background-position: center;
+}
