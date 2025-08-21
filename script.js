@@ -1,68 +1,100 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Mobile Menu functionality
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
-
-    mobileMenuButton.addEventListener('click', () => {
-        mobileMenu.style.display = mobileMenu.style.display === 'block' ? 'none' : 'block';
-    });
-
-    // Smooth scrolling for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-            if (mobileMenu.style.display === 'block') {
-                mobileMenu.style.display = 'none';
-            }
-        });
-    });
-
-    // Modal functionality
-    const modalOverlay = document.getElementById('contact-modal');
-    const closeModalButton = document.getElementById('close-modal');
     const openModalButtons = document.querySelectorAll('.open-modal');
+    const closeModalButton = document.getElementById('close-modal');
+    const modalOverlay = document.getElementById('contact-modal');
     const contactForm = document.getElementById('contact-form');
     const messageBox = document.getElementById('message-box');
+    const bmiResultBox = document.getElementById('bmi-result-box');
+    const bmiValueSpan = document.getElementById('bmi-value');
+    const bmiCategoryP = document.getElementById('bmi-category');
 
-    // Function to show the modal
+    // Toggle mobile menu
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('mobile-menu-open');
+    });
+
+    // Open the modal
     openModalButtons.forEach(button => {
         button.addEventListener('click', () => {
-            modalOverlay.classList.add('show');
+            modalOverlay.style.display = 'flex';
         });
     });
 
-    // Function to hide the modal
+    // Close the modal
     closeModalButton.addEventListener('click', () => {
-        modalOverlay.classList.remove('show');
-        messageBox.classList.add('hidden');
+        modalOverlay.style.display = 'none';
+        resetForm();
     });
 
-    // Close modal when clicking outside the content
-    modalOverlay.addEventListener('click', (e) => {
-        if (e.target === modalOverlay) {
-            modalOverlay.classList.remove('show');
-            messageBox.classList.add('hidden');
+    // Close modal if user clicks outside of it
+    window.addEventListener('click', (event) => {
+        if (event.target === modalOverlay) {
+            modalOverlay.style.display = 'none';
+            resetForm();
         }
     });
 
+    // Function to calculate BMI
+    function calculateBMI(weight, height) {
+        // Height is in cm, convert to meters
+        const heightMeters = height / 100;
+        // BMI formula: weight (kg) / [height (m)]^2
+        const bmi = weight / (heightMeters * heightMeters);
+        return bmi.toFixed(1); // Return BMI rounded to 1 decimal place
+    }
+
+    // Function to determine BMI category
+    function getBMICategory(bmi) {
+        if (bmi < 18.5) {
+            return "Underweight";
+        } else if (bmi >= 18.5 && bmi <= 24.9) {
+            return "Normal weight";
+        } else if (bmi >= 25 && bmi <= 29.9) {
+            return "Overweight";
+        } else {
+            return "Obesity";
+        }
+    }
+
     // Handle form submission
-    contactForm.addEventListener('submit', (e) => {
-        e.preventDefault();
+    contactForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        // Get form data
         const formData = new FormData(contactForm);
         const data = Object.fromEntries(formData.entries());
-        
-        // Log the data to the console
-        console.log('Submitted Form Data:', data);
-        
+
+        // Calculate and display BMI
+        const weight = parseFloat(data.weight);
+        const height = parseFloat(data.height);
+
+        if (weight > 0 && height > 0) {
+            const bmi = calculateBMI(weight, height);
+            const category = getBMICategory(bmi);
+
+            bmiValueSpan.textContent = bmi;
+            bmiCategoryP.textContent = `Category: ${category}`;
+            bmiResultBox.classList.remove('hidden');
+        } else {
+            bmiResultBox.classList.add('hidden');
+        }
+
         // Show a success message
-        messageBox.textContent = 'Thank you! Your details have been submitted. I will get in touch with you shortly.';
+        messageBox.textContent = 'Thank you for your submission! We will get back to you shortly.';
         messageBox.classList.remove('hidden');
-        messageBox.classList.add('bg-green-700', 'text-white');
-        
-        // Reset the form after submission
-        contactForm.reset();
+        messageBox.classList.add('bg-green-100', 'text-green-800', 'border', 'border-green-200');
+
+        // Optional: Send data to a server (not implemented here)
+        console.log('Form data:', data);
     });
+
+    // Function to reset form and messages on close
+    function resetForm() {
+        contactForm.reset();
+        messageBox.classList.add('hidden');
+        messageBox.classList.remove('bg-green-100', 'text-green-800', 'border', 'border-green-200');
+        bmiResultBox.classList.add('hidden');
+    }
 });
