@@ -1,6 +1,6 @@
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f8fafc; /* Lighter background for better contrast */
+    background-color: #f8fafc; /* Keep the light background */
 }
 
 /* Custom scroll-behavior for smooth scrolling */
@@ -10,13 +10,13 @@ html {
 
 /* Style the CTA button with a subtle gradient and shadow */
 .cta-button {
-    background-image: linear-gradient(to right, #ef4444, #b91c1c); /* Updated red gradient */
+    background-image: linear-gradient(to right, #f97316, #ea580c); /* Electric orange gradient */
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .cta-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
 }
 
 /* SVG icons */
