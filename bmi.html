@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator - GetFitWithRohit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #030712; /* A dark color for the body background */
+            font-family: 'Inter', sans-serif;
+        }
+
+        .cta-button {
+            background-color: #a3e635; /* Lime-500 equivalent */
+        }
+        
+        .cta-button:hover {
+            background-color: #84cc16; /* Lime-600 equivalent */
+        }
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-200 flex items-center justify-center min-h-screen">
+    <main class="w-full max-w-lg mx-auto p-4">
+        <section id="bmi" class="bg-gray-900 p-8 rounded-xl shadow-lg border border-gray-700">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-white">
+                BMI Calculator
+            </h2>
+            <p class="text-center text-gray-400 max-w-xl mx-auto mb-12">
+                Find out your Body Mass Index to understand your fitness level.
+            </p>
+            <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                <form id="bmi-form" class="space-y-6">
+                    <div>
+                        <label for="height" class="block text-lg font-medium text-gray-300 mb-2">Height (in cm)</label>
+                        <input type="number" id="height" name="height" required class="w-full rounded-md bg-gray-900 border-gray-700 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50 p-3">
+                    </div>
+                    <div>
+                        <label for="weight" class="block text-lg font-medium text-gray-300 mb-2">Weight (in kg)</label>
+                        <input type="number" id="weight" name="weight" required class="w-full rounded-md bg-gray-900 border-gray-700 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50 p-3">
+                    </div>
+                    <button type="submit" class="w-full cta-button text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
+                        Calculate BMI
+                    </button>
+                </form>
+                <div id="bmi-result" class="mt-8 text-white font-bold text-2xl text-center hidden"></div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const bmiForm = document.getElementById('bmi-form');
+        const bmiResultDiv = document.getElementById('bmi-result');
+
+        bmiForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const heightCm = document.getElementById('height').value;
+            const weightKg = document.getElementById('weight').value;
+
+            if (heightCm > 0 && weightKg > 0) {
+                const heightM = heightCm / 100;
+                const bmi = (weightKg / (heightM * heightM)).toFixed(2);
+                let category = '';
+                let color = '';
+
+                if (bmi < 18.5) {
+                    category = 'Underweight';
+                    color = 'text-blue-400';
+                } else if (bmi >= 18.5 && bmi < 24.9) {
+                    category = 'Normal weight';
+                    color = 'text-green-400';
+                } else if (bmi >= 25 && bmi < 29.9) {
+                    category = 'Overweight';
+                    color = 'text-yellow-400';
+                } else {
+                    category = 'Obese';
+                    color = 'text-red-400';
+                }
+
+                bmiResultDiv.innerHTML = `Your BMI is: <span class="${color}">${bmi}</span><br>Category: <span class="${color}">${category}</span>`;
+                bmiResultDiv.classList.remove('hidden');
+
+            } else {
+                bmiResultDiv.innerHTML = `<span class="text-red-400">Please enter valid height and weight.</span>`;
+                bmiResultDiv.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
