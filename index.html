@@ -357,8 +357,8 @@
             
             <div id="workout-modal-content" class="bg-gray-800 p-6 rounded-xl border border-gray-700">
                 <h4 class="text-xl font-semibold text-white mb-4">Sample Workout:</h4>
-                <ul id="workout-list" class="space-y-3 text-gray-300">
-                    </ul>
+                <div id="workout-list" class="space-y-4 text-gray-300">
+                    </div>
                 <div class="mt-6 text-center">
                     <a href="#contact" id="subscribe-link" class="inline-block cta-button text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
                         Subscribe for More
@@ -507,11 +507,21 @@
             const calisthenicsCard = document.getElementById('calisthenics-card');
             
             personalizedCard.addEventListener('click', () => {
-                showWorkoutModal('Personalized Plans', 'This is a sample workout from our personalized training program designed to build a strong foundation and get you started on your fitness journey.');
+                const gymWorkout = [
+                    { title: 'Push Day', exercises: ['Barbell Bench Press', 'Dumbbell Shoulder Press', 'Tricep Pushdowns'] },
+                    { title: 'Pull Day', exercises: ['Pull-ups', 'Barbell Rows', 'Bicep Curls'] },
+                    { title: 'Legs Day', exercises: ['Barbell Squats', 'Romanian Deadlifts', 'Leg Extensions'] }
+                ];
+                showWorkoutModal('Personalized Plans', 'This is a sample gym workout routine from our personalized plans, designed to build muscle and strength.', gymWorkout);
             });
             
             calisthenicsCard.addEventListener('click', () => {
-                showWorkoutModal('Calisthenics Training', 'This is a sample bodyweight workout from our calisthenics program, focused on building functional strength and control.');
+                const bodyweightWorkout = [
+                    { title: 'Push Day', exercises: ['Push-ups', 'Dips', 'Handstand Push-ups'] },
+                    { title: 'Pull Day', exercises: ['Pull-ups', 'Chin-ups', 'Rows'] },
+                    { title: 'Legs Day', exercises: ['Pistol Squats', 'Lunges', 'Calf Raises'] }
+                ];
+                showWorkoutModal('Calisthenics Training', 'This is a sample bodyweight workout routine from our calisthenics programs, focused on functional strength.', bodyweightWorkout);
             });
 
             closeWorkoutModalButton.addEventListener('click', () => {
@@ -524,34 +534,28 @@
                 }
             });
 
-            function showWorkoutModal(title, description) {
+            function showWorkoutModal(title, description, workoutData) {
                 workoutModalTitle.textContent = title;
                 workoutModalDescription.textContent = description;
                 workoutList.innerHTML = ''; // Clear previous content
                 
-                let workoutData;
-                if (title === 'Personalized Plans') {
-                    workoutData = [
-                        'Warm-up: 5 min jog, dynamic stretches',
-                        'Push-ups: 3 sets of 10-12 reps',
-                        'Squats: 3 sets of 15 reps',
-                        'Plank: 3 sets, hold for 30-60 sec',
-                        'Cool-down: 5 min static stretches'
-                    ];
-                } else { // Calisthenics Training
-                    workoutData = [
-                        'Warm-up: 5 min jumping jacks, arm circles',
-                        'Pull-ups (assisted): 3 sets of 5-8 reps',
-                        'Dips: 3 sets of 8-10 reps',
-                        'Leg Raises: 3 sets of 12-15 reps',
-                        'Cool-down: 5 min static stretches'
-                    ];
-                }
+                workoutData.forEach(day => {
+                    const dayDiv = document.createElement('div');
+                    dayDiv.className = 'bg-gray-700/50 p-4 rounded-md';
 
-                workoutData.forEach(itemText => {
-                    const li = document.createElement('li');
-                    li.textContent = itemText;
-                    workoutList.appendChild(li);
+                    const dayTitle = document.createElement('h4');
+                    dayTitle.className = 'font-bold text-lime-400 text-lg mb-2';
+                    dayTitle.textContent = day.title;
+                    dayDiv.appendChild(dayTitle);
+
+                    const ul = document.createElement('ul');
+                    day.exercises.forEach(exercise => {
+                        const li = document.createElement('li');
+                        li.textContent = exercise;
+                        ul.appendChild(li);
+                    });
+                    dayDiv.appendChild(ul);
+                    workoutList.appendChild(dayDiv);
                 });
                 
                 workoutModal.classList.add('active');
