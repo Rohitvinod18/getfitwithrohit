@@ -1,6 +1,6 @@
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f7f9fc;
+    background-color: #f0f4f8; /* Light gray background */
 }
 
 /* Custom scroll-behavior for smooth scrolling */
@@ -10,13 +10,13 @@ html {
 
 /* Style the CTA button with a subtle gradient and shadow */
 .cta-button {
-    background-image: linear-gradient(to right, #22c55e, #10b981);
+    background-image: linear-gradient(to right, #3b82f6, #2563eb); /* Blue gradient */
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .cta-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
 }
 
 /* SVG icons */
@@ -58,7 +58,7 @@ html {
 }
 
 .modal-content {
-    background-color: #111827;
+    background-color: #ffffff; /* White modal background */
     padding: 2.5rem;
     border-radius: 1rem;
     width: 90%;
@@ -72,9 +72,10 @@ html {
     transform: scale(1);
 }
 
-/* Hero section background image and overlay */
+/* Hero section background pattern and overlay */
 .hero-bg {
-    background-image: url('http://googleusercontent.com/file_content/1');
-    background-size: cover;
-    background-position: center;
+    background-image: url('data:image/svg+xml,%3Csvg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M11 6a5 5 0 11-10 0 5 5 0 0110 0zm-1 0a4 4 0 10-8 0 4 4 0 008 0z" fill="%23e2e8f0" fill-opacity="0.2"/%3E%3Cpath d="M10 6a4 4 0 11-8 0 4 4 0 018 0z" fill="%23e2e8f0" fill-opacity="0.1"/%3E%3Cpath d="M5 5h2v2H5z" fill="%23e2e8f0" fill-opacity="0.1"/%3E%3C/svg%3E');
+    background-size: 12px 12px;
+    background-repeat: repeat;
+    background-color: #ffffff;
 }
