@@ -1,6 +1,6 @@
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f0f4f8; /* Light gray background */
+    background-color: #f8fafc; /* Lighter background for better contrast */
 }
 
 /* Custom scroll-behavior for smooth scrolling */
@@ -10,13 +10,13 @@ html {
 
 /* Style the CTA button with a subtle gradient and shadow */
 .cta-button {
-    background-image: linear-gradient(to right, #3b82f6, #2563eb); /* Blue gradient */
+    background-image: linear-gradient(to right, #ef4444, #b91c1c); /* Updated red gradient */
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .cta-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
 }
 
 /* SVG icons */
@@ -58,7 +58,7 @@ html {
 }
 
 .modal-content {
-    background-color: #ffffff; /* White modal background */
+    background-color: #ffffff;
     padding: 2.5rem;
     border-radius: 1rem;
     width: 90%;
