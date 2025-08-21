@@ -3,106 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GetFitWithRohit</title>
+    <title>Gallery | GetFitWithRohit</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        .hero-bg {
-            background-image: url('https://images.unsplash.com/photo-1549060278-f7c7562215c9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-            background-size: cover;
-            background-position: center;
-        }
-
         .cta-button {
             background-color: #a3e635; /* Lime-500 equivalent */
         }
-
         .cta-button:hover {
             background-color: #84cc16; /* Lime-600 equivalent */
         }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.75);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease-in-out;
+        /* --- New/Updated CSS for Pop Animation --- */
+        .pop-on-hover {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .pop-on-hover:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+            animation: pop-bounce 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         }
 
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
+        @keyframes pop-bounce {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1.05); }
         }
-
-        .modal-content {
-            background-color: #1f2937; /* Gray-800 equivalent */
-            padding: 2.5rem;
-            border-radius: 1rem;
-            max-width: 500px;
-            width: 90%;
-            position: relative;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            transform: scale(0.9);
-            animation: modal-pop 0.3s forwards;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        
-        @keyframes modal-pop {
-            from { transform: scale(0.9); }
-            to { transform: scale(1); }
-        }
-
+        /* -------------------------------------- */
         .mobile-menu {
             transition: max-height 0.3s ease-in-out;
             max-height: 0;
             overflow: hidden;
         }
-        
         .mobile-menu.active {
-            max-height: 500px;
-        }
-        
-        .typing-effect {
-            font-family: 'Inter', monospace;
-            display: inline-block;
-            overflow: hidden;
-            white-space: pre-wrap;
-            border-right: 2px solid #a3e635;
-            animation: blink-cursor 0.75s step-end infinite;
-            letter-spacing: 0.1em;
-            vertical-align: middle;
-        }
-
-        @keyframes blink-cursor {
-            from, to { border-color: transparent }
-            50% { border-color: #a3e635; }
-        }
-
-        /* --- New/Updated CSS for Hover Effect --- */
-        .card-hover-effect {
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-        }
-
-        .card-hover-effect:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
-        }
-        /* -------------------------------------- */
-
-        body.modal-open {
-            overflow: hidden;
+            max-height: 500px; /* Adjust as needed */
         }
     </style>
 </head>
@@ -110,22 +49,21 @@
 
     <header class="bg-gray-950 sticky top-0 z-50 shadow-md">
         <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-gray-50">
+            <a href="index.html" class="text-2xl font-bold text-gray-50">
                 GetFitWithRohit
             </a>
 
             <ul class="hidden md:flex space-x-8 text-lg font-medium">
-                <li><a href="#home" class="hover:text-lime-500 transition-colors duration-200">Home</a></li>
-                <li><a href="#features" class="hover:text-lime-500 transition-colors duration-200">Features</a></li>
-                <li><a href="#about" class="hover:text-lime-500 transition-colors duration-200">Trainer</a></li>
-                <li><button id="open-bmi-modal" class="hover:text-lime-500 transition-colors duration-200">BMI</button></li>
-                <li><a href="#pricing" class="hover:text-lime-500 transition-colors duration-200">Pricing</a></li>
-                <li><a href="gallery.html" class="hover:text-lime-500 transition-colors duration-200">Gallery</a></li>
-                <li><a href="#contact" class="hover:text-lime-500 transition-colors duration-200">Contact</a></li>
+                <li><a href="index.html#home" class="hover:text-lime-500 transition-colors duration-200">Home</a></li>
+                <li><a href="index.html#features" class="hover:text-lime-500 transition-colors duration-200">Features</a></li>
+                <li><a href="index.html#about" class="hover:text-lime-500 transition-colors duration-200">Trainer</a></li>
+                <li><a href="index.html#pricing" class="hover:text-lime-500 transition-colors duration-200">Pricing</a></li>
+                <li><a href="gallery.html" class="hover:text-lime-500 transition-colors duration-200 font-bold text-lime-500">Gallery</a></li>
+                <li><a href="index.html#contact" class="hover:text-lime-500 transition-colors duration-200">Contact</a></li>
             </ul>
 
-            <button id="mobile-menu-button" class="md:hidden p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-lime-500" aria-label="Toggle mobile menu">
-                <svg class="svg-icon w-6 h-6" viewBox="0 0 24 24" stroke="#e2e8f0" fill="none">
+            <button id="mobile-menu-button" class="md:hidden p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-lime-500">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" stroke="#e2e8f0" fill="none">
                     <path d="M4 6h16M4 12h16m-7 6h7"></path>
                 </svg>
             </button>
@@ -133,318 +71,77 @@
 
         <div id="mobile-menu" class="mobile-menu md:hidden bg-gray-900 shadow-md rounded-b-xl pb-4">
             <ul class="flex flex-col items-center space-y-4 text-lg font-medium pt-4">
-                <li><a href="#home" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Home</a></li>
-                <li><a href="#features" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Features</a></li>
-                <li><a href="#about" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Trainer</a></li>
-                <li><button id="open-bmi-modal-mobile" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">BMI</button></li>
-                <li><a href="#pricing" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Pricing</a></li>
-                <li><a href="gallery.html" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Gallery</a></li>
-                <li><a href="#contact" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Contact</a></li>
+                <li><a href="index.html#home" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Home</a></li>
+                <li><a href="index.html#features" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Features</a></li>
+                <li><a href="index.html#about" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Trainer</a></li>
+                <li><a href="index.html#pricing" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Pricing</a></li>
+                <li><a href="gallery.html" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200 font-bold text-lime-500">Gallery</a></li>
+                <li><a href="index.html#contact" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Contact</a></li>
             </ul>
         </div>
     </header>
 
     <main>
-        <section id="home" class="relative hero-bg py-24 md:py-32 text-center text-white">
-            <div class="absolute inset-0 bg-black/50"></div>
-            <div class="container mx-auto px-4 relative z-10">
-                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4 animate__animated animate__fadeInDown">
-                    Unlock Your Potential
-                </h1>
-                <a href="#features" class="inline-block cta-button text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 mt-6 animate__animated animate__zoomIn">
-                    Discover Our Programs
-                </a>
-            </div>
-        </section>
-
-        <section id="features" class="py-20 md:py-28 bg-gray-900">
-            <div class="container mx-auto px-4">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-white animated-element">
-                    Why Choose Our Training
-                </h2>
-                <p class="text-center text-gray-400 max-w-xl mx-auto mb-12 animated-element">
-                    We're committed to providing the best tools and support for your fitness journey.
-                </p>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                    <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 cursor-pointer animated-element card-hover-effect" id="personalized-card">
-                        <div class="text-lime-500 mb-4">
-                            <svg class="w-12 h-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-2 text-white text-center">Personalized Plans</h3>
-                        <p class="text-gray-400 text-center">
-                            Get a custom workout and nutrition plan designed specifically for your body and your goals.
-                        </p>
-                    </div>
-
-                    <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 cursor-pointer animated-element card-hover-effect" id="calisthenics-card">
-                        <div class="text-lime-500 mb-4">
-                             <svg class="w-12 h-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M17 11h.01"></path>
-                             </svg>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-2 text-white text-center">Calisthenics Training</h3>
-                        <p class="text-gray-400 text-center">
-                            Master bodyweight exercises and build incredible functional strength with our specialized calisthenics programs.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="about" class="py-20 md:py-28 bg-gray-950">
+        <section id="gallery" class="py-20 md:py-28 bg-gray-900">
             <div class="container mx-auto px-4 text-center">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white animated-element">
-                    Meet Your Trainer
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white animate__animated animate__fadeInDown">
+                    Client Transformations & Action Shots
                 </h2>
-                <div class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-12">
-                    <div class="w-64 h-64 rounded-full overflow-hidden border-4 border-lime-500 shadow-xl flex-shrink-0 animated-element">
-                        <img src="./rohit.jpg" alt="Trainer Rohit" class="w-full h-full object-cover">
-                    </div>
-                    <div class="md:w-1/2 text-left animated-element" id="trainer-bio-container">
-                        <p class="text-gray-300">
-                            <span id="typing-text"></span>
-                        </p>
-                        <p class="mt-4 text-gray-300">
-                            <span id="typing-text-2"></span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="pricing" class="py-20 md:py-28 bg-gray-900">
-            <div class="container mx-auto px-4 text-center">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white animated-element">
-                    Choose Your Personal Training Plan
-                </h2>
-                <p class="text-center text-gray-400 max-w-xl mx-auto mb-12 animated-element">
-                    Find the perfect plan to kickstart your journey.
+                <p class="text-center text-gray-400 max-w-xl mx-auto mb-12 animate__animated animate__fadeInUp">
+                    Check out some of our amazing clients and the progress they've made on their fitness journeys.
                 </p>
 
-                <div class="flex flex-col md:flex-row justify-center items-center md:space-x-8 space-y-8 md:space-y-0">
-                    <div class="bg-gray-800 p-8 rounded-xl shadow-lg w-full md:w-1/3 border border-gray-700 cursor-pointer animated-element card-hover-effect">
-                        <h3 class="text-2xl font-bold mb-2 text-white">Starter Pack</h3>
-                        <p class="text-gray-400 mb-6">For beginners getting started</p>
-                        <div class="text-5xl font-extrabold text-white mb-2">₹1000<span class="text-xl font-medium text-gray-400">/mo</span></div>
-                        <ul class="text-left space-y-3 text-gray-400 mb-8">
-                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> 4 Sessions/Month</li>
-                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Basic Workout Plan</li>
-                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Email Support</li>
-                        </ul>
-                        <button class="cta-button open-get-it-modal w-full text-gray-900 py-3 rounded-full font-bold">GET IT</button>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="animate__animated animate__fadeInUp pop-on-hover">
+                        <img src="https://images.unsplash.com/photo-1549060278-f7c7562215c9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                             alt="Client working out" 
+                             class="w-full h-80 object-cover pop-on-hover">
                     </div>
-
-                    <div class="bg-gray-800 p-8 rounded-xl shadow-lg w-full md:w-1/3 border border-gray-700 cursor-pointer animated-element card-hover-effect">
-                        <h3 class="text-2xl font-bold mb-2 text-white">Advanced Training</h3>
-                        <p class="text-gray-400 mb-6">For committed individuals</p>
-                        <div class="text-5xl font-extrabold text-white mb-2">₹2000<span class="text-xl font-medium text-gray-400">/mo</span></div>
-                        <ul class="text-left space-y-3 text-gray-400 mb-8">
-                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> 8 Sessions/Month</li>
-                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Personalized Workout Plan</li>
-                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Nutrition Guidance</li>
-                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Priority Support</li>
-                        </ul>
-                        <button class="cta-button open-get-it-modal w-full text-gray-900 py-3 rounded-full font-bold">GET IT</button>
+                    <div class="animate__animated animate__fadeInUp animate__delay-1s pop-on-hover">
+                        <img src="https://images.unsplash.com/photo-1579720524456-628d0b2848b6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                             alt="Trainer with Client" 
+                             class="w-full h-80 object-cover pop-on-hover">
                     </div>
-
-                    <div class="bg-gray-800 p-8 rounded-xl shadow-lg w-full md:w-1/3 border border-gray-700 cursor-pointer animated-element card-hover-effect">
-                        <h3 class="text-2xl font-bold mb-2 text-white">Small Group Training</h3>
-                        <p class="text-gray-400 mb-6">For corporate and group training</p>
-                        <div class="text-5xl font-extrabold text-white mb-2">₹3000<span class="text-xl font-medium text-gray-400">/mo</span></div>
-                        <ul class="text-left space-y-3 text-gray-400 mb-8">
-                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Up to 5 people</li>
-                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Customized Group Plan</li>
-                            <li class="flex items-center"><svg class="svg-icon w-4 h-4 text-lime-500 mr-2" viewBox="0 0 24 24" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Dedicated Group Coach</li>
-                        </ul>
-                        <button class="cta-button open-get-it-modal w-full text-gray-900 py-3 rounded-full font-bold">GET IT</button>
+                    <div class="animate__animated animate__fadeInUp animate__delay-2s pop-on-hover">
+                        <img src="https://images.unsplash.com/photo-1534438327276-1469e38f9725?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                             alt="Weight training session" 
+                             class="w-full h-80 object-cover pop-on-hover">
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="bg-lime-500 text-gray-900 py-16">
-            <div class="container mx-auto px-4 text-center animated-element">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">
-                    Ready to Start Your Journey?
-                </h2>
-                <p class="text-lg text-gray-700 max-w-xl mx-auto mb-8">
-                    Join our community and transform your life with the support of our expert trainers.
-                </p>
-                <div class="flex flex-col items-center space-y-4">
-                    <a href="mailto:rohitvinod29@gmail.com" class="flex items-center text-gray-900 font-bold hover:text-gray-700 transition-colors duration-200">
-                        <svg class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                        rohitvinod29@gmail.com
-                    </a>
-                    <a href="tel:+919567434602" class="flex items-center text-gray-900 font-bold hover:text-gray-700 transition-colors duration-200">
-                        <svg class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2 2h-11a2 2 0 01-2-2v-3a2 2 0 012-2h11a2 2 0 012 2z"></path><path d="M11 5a2 2 0 012-2h10a2 2 0 012 2v3a2 2 0 01-2 2h-10a2 2 0 01-2-2V5z"></path></svg>
-                        +91 9567434602
-                    </a>
-                    <a href="https://instagram.com/rohit__vinod" target="_blank" class="flex items-center text-gray-900 font-bold hover:text-gray-700 transition-colors duration-200">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37a4 4 0 11-8 0 4 4 0 018 0z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                        @rohit__vinod
-                    </a>
+                    <div class="animate__animated animate__fadeInUp animate__delay-3s pop-on-hover">
+                         <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                              alt="Yoga and stretching session" 
+                              class="w-full h-80 object-cover pop-on-hover">
+                    </div>
+                    <div class="animate__animated animate__fadeInUp animate__delay-4s pop-on-hover">
+                         <img src="https://images.unsplash.com/photo-1552196557-498c19953046?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                              alt="Calisthenics outdoor training" 
+                              class="w-full h-80 object-cover pop-on-hover">
+                    </div>
+                    <div class="animate__animated animate__fadeInUp animate__delay-5s pop-on-hover">
+                         <img src="https://images.unsplash.com/photo-1541534741619-3f191136b60e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                              alt="Team training session" 
+                              class="w-full h-80 object-cover pop-on-hover">
+                    </div>
                 </div>
             </div>
         </section>
     </main>
-
-    <div id="contact-modal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-white">Get in Touch</h3>
-                <button id="close-modal" class="text-gray-400 hover:text-white transition-colors duration-200" aria-label="Close contact form">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            <form id="contact-form" class="space-y-4" action="https://script.google.com/macros/s/AKfycbxSSWpDGLWXhl7QJbmZKXEFvkI0LAOSGsqtKloB0Ge7nFroZiOQk8bOlrH4TtaPzKOVfA/exec" method="POST">
-                <div>
-                    <label for="name" class="block text-sm font-medium text-gray-300">Name</label>
-                    <input type="text" id="name" name="name" required class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50">
-                </div>
-                <div>
-                    <label for="phone" class="block text-sm font-medium text-gray-300">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" required class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50">
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label for="age" class="block text-sm font-medium text-gray-300">Age</label>
-                        <input type="number" id="age" name="age" required class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50">
-                    </div>
-                    <div>
-                        <label for="height" class="block text-sm font-medium text-gray-300">Height (cm)</label>
-                        <input type="number" id="height" name="height" required class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label for="weight" class="block text-sm font-medium text-gray-300">Weight (kg)</label>
-                        <input type="number" id="weight" name="weight" required class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50">
-                    </div>
-                    <div>
-                        <label for="profession" class="block text-sm font-medium text-gray-300">Profession</label>
-                        <input type="text" id="profession" name="profession" required class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50">
-                    </div>
-                </div>
-                <div>
-                    <label for="address" class="block text-sm font-medium text-gray-300">Address</label>
-                    <textarea id="address" name="address" rows="2" required class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50"></textarea>
-                </div>
-                <div>
-                    <label for="goal" class="block text-sm font-medium text-gray-300">Fitness Goal</label>
-                    <select id="goal" name="goal" required class="mt-1 block w-full rounded-md bg-gray-800 border-gray-600 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50">
-                        <option value="">Select a goal</option>
-                        <option value="Fat Loss">Fat Loss</option>
-                        <option value="Muscle Gain">Muscle Gain</option>
-                        <option value="CrossFit">CrossFit</option>
-                        <option value="Strength Training">Strength Training</option>
-                        <option value="Flexibility">Flexibility</option>
-                        <option value="Endurance">Endurance</option>
-                        <option value="General Fitness">General Fitness</option>
-                        <option value="Rehabilitation">Rehabilitation</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <button type="submit" class="w-full cta-button text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
-                    Submit Details
-                </button>
-            </form>
-            <div id="message-box" class="mt-4 p-4 rounded-md text-sm hidden"></div>
-        </div>
-    </div>
-
-    <div id="get-it-modal" class="modal-overlay">
-        <div class="modal-content text-center">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-white">Get Started Today!</h3>
-                <button id="close-get-it-modal" class="text-gray-400 hover:text-white transition-colors duration-200" aria-label="Close get started modal">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            <p class="text-gray-300 mb-6">
-                Ready to begin your fitness journey? Fill out the form below or contact Rohit directly!
-            </p>
-            <a href="tel:+919567434602" class="flex items-center justify-center text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 cta-button mb-6">
-                <svg class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2 2h-11a2 2 0 01-2-2v-3a2 2 0 012-2h11a2 2 0 012 2z"></path><path d="M11 5a2 2 0 012-2h10a2 2 0 012 2v3a2 2 0 01-2 2h-10a2 2 0 01-2-2V5z"></path></svg>
-                Call Rohit at +91 9567434602
-            </a>
-            <p class="text-gray-400 mb-4">or</p>
-            <button id="open-contact-form-button" class="w-full text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 cta-button">
-                Fill Out the Form
-            </button>
-        </div>
-    </div>
     
-    <div id="bmi-modal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-white">BMI Calculator</h3>
-                <button id="close-bmi-modal" class="text-gray-400 hover:text-white transition-colors duration-200" aria-label="Close BMI calculator">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            <p class="text-center text-gray-400 mb-6">
-                Find out your Body Mass Index to understand your fitness level.
-            </p>
-            <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
-                <form id="bmi-form-modal" class="space-y-4">
-                    <div>
-                        <label for="modal-height" class="block text-sm font-medium text-gray-300">Height (in cm)</label>
-                        <input type="number" id="modal-height" name="height" required class="mt-1 block w-full rounded-md bg-gray-900 border-gray-700 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50 p-2">
-                    </div>
-                    <div>
-                        <label for="modal-weight" class="block text-sm font-medium text-gray-300">Weight (in kg)</label>
-                        <input type="number" id="modal-weight" name="weight" required class="mt-1 block w-full rounded-md bg-gray-900 border-gray-700 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50 p-2">
-                    </div>
-                    <button type="submit" class="w-full cta-button text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
-                        Calculate BMI
-                    </button>
-                </form>
-                <div id="bmi-result-modal" class="mt-4 text-white text-center font-bold"></div>
-            </div>
-            <a href="bmi.html" class="block text-center mt-6 text-lime-500 hover:text-lime-400 transition-colors">Go to full BMI page</a>
-        </div>
-    </div>
-
-    <div id="workout-modal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="flex justify-between items-center mb-6">
-                <h3 id="workout-modal-title" class="text-2xl font-bold text-white"></h3>
-                <button id="close-workout-modal" class="text-gray-400 hover:text-white transition-colors duration-200" aria-label="Close workout plan modal">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            <p id="workout-modal-description" class="text-gray-400 mb-6"></p>
-            
-            <div id="workout-modal-content" class="bg-gray-800 p-6 rounded-xl border border-gray-700">
-                <h4 class="text-xl font-semibold text-white mb-4">Sample Workout:</h4>
-                <div id="workout-list" class="space-y-4 text-gray-300">
-                </div>
-                <div class="mt-6 text-center">
-                    <a href="#contact" id="subscribe-link" class="inline-block cta-button text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
-                        Subscribe for More
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <footer class="bg-gray-950 text-gray-300 py-12">
-        <div class="container mx-auto px-4 text-center animated-element">
+        <div class="container mx-auto px-4 text-center">
             <p class="text-sm">&copy; 2025 GetFitWithRohit. All Rights Reserved.</p>
             <div class="flex justify-center space-x-6 mt-4">
-                <a href="#" class="hover:text-white transition-colors duration-200" aria-label="Twitter">
+                <a href="#" class="hover:text-white transition-colors duration-200">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M22 6.5c-0.8 0.4-1.6 0.7-2.4 0.9 0.9-0.6 1.6-1.5 1.9-2.6-0.9 0.5-1.9 0.9-3 1.1-0.9-0.9-2.2-1.5-3.6-1.5-2.7 0-4.9 2.2-4.9 4.9 0 0.4 0.1 0.8 0.1 1.2-4.1-0.2-7.7-2.2-10.1-5.2-0.4 0.8-0.6 1.7-0.6 2.7 0 1.7 0.9 3.2 2.2 4.1-0.8-0.03-1.6-0.2-2.3-0.6v0.1c0 2.4 1.7 4.4 4 4.8-0.4 0.1-0.9 0.2-1.4 0.2-0.3 0-0.7-0.03-1-0.1 0.6 2 2.5 3.5 4.7 3.5-1.7 1.3-3.8 2.1-6.1 2.1-0.4 0-0.8-0.02-1.1-0.1 2.2 1.4 4.8 2.2 7.6 2.2 9.2 0 14.3-7.7 14.3-14.3 0-0.2 0-0.5-0.01-0.7 1-0.7 1.9-1.5 2.6-2.5z"></path>
                     </svg>
                 </a>
-                <a href="#" class="hover:text-white transition-colors duration-200" aria-label="Facebook">
+                <a href="#" class="hover:text-white transition-colors duration-200">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M12 0C5.373 0 0 5.373 0 12c0 6.627 5.373 12 12 12s12-5.373 12-12c0-6.627-5.373-12-12-12zm4.18 17.51c0 0.22-0.01 0.43-0.03 0.64-0.15 0.94-0.6 1.76-1.25 2.37-0.6 0.61-1.41 1.05-2.35 1.2-0.96 0.15-1.96-0.03-2.88-0.54-0.92-0.5-1.63-1.26-2.1-2.22-0.47-0.96-0.68-2.04-0.63-3.13 0.05-1.09 0.43-2.14 1.14-3.04 0.72-0.9 1.66-1.55 2.72-1.9 1.05-0.35 2.15-0.44 3.24-0.24s2.06 0.73 2.87 1.66c0.81 0.93 1.36 2.06 1.54 3.26l-3.32 0.01c-0.1-0.64-0.4-1.25-0.89-1.72-0.49-0.47-1.11-0.75-1.78-0.83-0.67-0.08-1.35 0.06-1.96 0.43-0.61 0.37-1.11 0.92-1.42 1.59-0.31 0.67-0.42 1.41-0.31 2.13 0.11 0.72 0.44 1.39 0.95 1.93 0.51 0.54 1.15 0.94 1.85 1.16 0.71 0.22 1.45 0.25 2.16 0.09 0.7-0.16 1.35-0.51 1.88-0.99l0.02-0.02c0.05-0.05 0.09-0.1 0.14-0.16zM12 2.08c-5.46 0-9.92 4.46-9.92 9.92s4.46 9.92 9.92 9.92 9.92-4.46 9.92-9.92-4.46-9.92-9.92-9.92zm-0.03 2.5c4.1 0 7.42 3.32 7.42 7.42s-3.32 7.42-7.42 7.42-7.42-3.32-7.42-7.42 3.32-7.42 7.42-7.42z"></path>
                     </svg>
                 </a>
-                <a href="#" class="hover:text-white transition-colors duration-200" aria-label="LinkedIn">
+                <a href="#" class="hover:text-white transition-colors duration-200">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16.5h-2v-7h2v7zm-2-8.5c-0.828 0-1.5-0.672-1.5-1.5s0.672-1.5 1.5-1.5 1.5 0.672 1.5 1.5-0.672 1.5-1.5 1.5zm11 8.5h-2v-4.5c0-1.155-0.945-2-2-2s-2 0.845-2 2v4.5h-2v-7h2v1.1c0.697-0.817 1.764-1.3 2.9-1.3 2.023 0 3.1 1.611 3.1 3.738v3.462z"></path>
                     </svg>
