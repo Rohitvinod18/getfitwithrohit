@@ -55,8 +55,10 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
             transform: scale(0.9);
             animation: modal-pop 0.3s forwards;
+            max-height: 80vh; /* Add this to enable scrolling for long content */
+            overflow-y: auto; /* Add this to enable scrolling for long content */
         }
-
+        
         @keyframes modal-pop {
             from { transform: scale(0.9); }
             to { transform: scale(1); }
@@ -87,6 +89,11 @@
         @keyframes blink-cursor {
             from, to { border-color: transparent }
             50% { border-color: #a3e635; }
+        }
+
+        /* Fix for the background scroll issue */
+        body.modal-open {
+            overflow: hidden;
         }
     </style>
 </head>
@@ -525,31 +532,42 @@
             const closeContactModalButton = document.getElementById('close-modal');
             const contactForm = document.getElementById('contact-form');
             const messageBox = document.getElementById('message-box');
+            
+            function openModal(modal) {
+                modal.classList.add('active');
+                document.body.classList.add('modal-open');
+            }
+
+            function closeModal(modal) {
+                modal.classList.remove('active');
+                document.body.classList.remove('modal-open');
+            }
 
             openGetItModalButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    getItModal.classList.add('active');
+                    openModal(getItModal);
                 });
             });
 
             closeGetItModalButton.addEventListener('click', () => {
-                getItModal.classList.remove('active');
+                closeModal(getItModal);
             });
 
             openContactFormButton.addEventListener('click', () => {
-                getItModal.classList.remove('active');
-                contactModal.classList.add('active');
+                closeModal(getItModal);
+                openModal(contactModal);
             });
             
             closeContactModalButton.addEventListener('click', () => {
-                contactModal.classList.remove('active');
+                closeModal(contactModal);
             });
+            
             window.addEventListener('click', (event) => {
                 if (event.target === contactModal) {
-                    contactModal.classList.remove('active');
+                    closeModal(contactModal);
                 }
                 if (event.target === getItModal) {
-                    getItModal.classList.remove('active');
+                    closeModal(getItModal);
                 }
             });
 
@@ -566,7 +584,7 @@
                 fetch(form.action, {
                     method: form.method,
                     body: formData,
-                    mode: 'no-cors' 
+                    mode: 'no-cors'  
                 })
                 .then(response => {
                     messageBox.textContent = 'Thank you! Your details have been submitted. Rohit will contact you shortly.';
@@ -593,19 +611,19 @@
             const bmiResultModalDiv = document.getElementById('bmi-result-modal');
 
             function openBmiModal() {
-                bmiModal.classList.add('active');
+                openModal(bmiModal);
                 mobileMenu.classList.remove('active');
             }
             openBmiModalButton.addEventListener('click', openBmiModal);
             openBmiModalMobileButton.addEventListener('click', openBmiModal);
             closeBmiModalButton.addEventListener('click', () => {
-                bmiModal.classList.remove('active');
+                closeModal(bmiModal);
                 bmiResultModalDiv.classList.add('hidden');
                 bmiFormModal.reset();
             });
             window.addEventListener('click', (event) => {
                 if (event.target === bmiModal) {
-                    bmiModal.classList.remove('active');
+                    closeModal(bmiModal);
                     bmiResultModalDiv.classList.add('hidden');
                     bmiFormModal.reset();
                 }
@@ -670,12 +688,12 @@
             });
 
             closeWorkoutModalButton.addEventListener('click', () => {
-                workoutModal.classList.remove('active');
+                closeModal(workoutModal);
             });
 
             window.addEventListener('click', (event) => {
                 if (event.target === workoutModal) {
-                    workoutModal.classList.remove('active');
+                    closeModal(workoutModal);
                 }
             });
 
@@ -703,7 +721,7 @@
                     workoutList.appendChild(dayDiv);
                 });
                 
-                workoutModal.classList.add('active');
+                openModal(workoutModal);
             }
         });
     </script>
