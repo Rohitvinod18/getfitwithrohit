@@ -77,7 +77,7 @@
             font-family: 'Inter', monospace;
             display: inline-block;
             overflow: hidden;
-            white-space: nowrap;
+            white-space: pre-wrap; /* Fix: Allow text to wrap */
             border-right: 2px solid #a3e635; /* Lime-500 cursor */
             animation: blink-cursor 0.75s step-end infinite;
             letter-spacing: 0.1em;
@@ -184,7 +184,7 @@
                     <div class="w-64 h-64 rounded-full overflow-hidden border-4 border-lime-500 shadow-xl flex-shrink-0 animated-element">
                         <img src="./rohit.jpg" alt="Trainer Rohit" class="w-full h-full object-cover">
                     </div>
-                    <div class="md:w-1/2 text-left animated-element">
+                    <div class="md:w-1/2 text-left animated-element" id="trainer-bio-container">
                         <p class="text-gray-300">
                             <span id="typing-text"></span>
                         </p>
@@ -451,11 +451,10 @@
                 const text1 = "I am Rohit, fitness trainer with a deep passion for calisthenics and personalized fitness. My journey began with a simple goal: to help people unlock their full potential and achieve a healthier, stronger body through functional training.";
                 const text2 = "I specialize in crafting personalized workout and nutrition plans that are tailored to your unique needs and goals. Whether you're a beginner looking to build a foundation or an athlete aiming to master bodyweight movements, I am here to guide you every step of the way.";
 
-                function typeWriter(element, text, delay = 20) {
+                function typeWriter(element, text, delay = 40) {
                     element.innerHTML = '';
-                    let i = 0;
-                    element.style.visibility = 'visible'; // Make the element visible
                     element.classList.add('typing-effect');
+                    let i = 0;
                     function type() {
                         if (i < text.length) {
                             element.innerHTML += text.charAt(i);
@@ -468,12 +467,12 @@
                     type();
                 }
 
-                typeWriter(typingText1, text1, 25);
+                typeWriter(typingText1, text1);
                 
                 // Start the second typing effect after the first one finishes
                 setTimeout(() => {
-                    typeWriter(typingText2, text2, 25);
-                }, text1.length * 25 + 1000); // Wait for the first text to finish plus a 1s delay
+                    typeWriter(typingText2, text2);
+                }, text1.length * 40 + 1000); // Wait for the first text to finish plus a 1s delay
             }
 
 
