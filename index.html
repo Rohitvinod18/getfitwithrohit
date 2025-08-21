@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
         .hero-bg {
             background-image: url('https://images.unsplash.com/photo-1549060278-f7c7562215c9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
@@ -112,10 +113,10 @@
         <section id="home" class="relative hero-bg py-24 md:py-32 text-center text-white">
             <div class="absolute inset-0 bg-black/50"></div>
             <div class="container mx-auto px-4 relative z-10">
-                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4">
+                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4 animate__animated animate__fadeInDown">
                     Unlock Your Potential
                 </h1>
-                <a href="#features" class="inline-block cta-button text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 mt-6">
+                <a href="#features" class="inline-block cta-button text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 mt-6 animate__animated animate__zoomIn">
                     Discover Our Programs
                 </a>
             </div>
@@ -508,20 +509,20 @@
             
             personalizedCard.addEventListener('click', () => {
                 const gymWorkout = [
-                    { title: 'Push Day', exercises: ['Barbell Bench Press', 'Dumbbell Shoulder Press', 'Tricep Pushdowns'] },
-                    { title: 'Pull Day', exercises: ['Pull-ups', 'Barbell Rows', 'Bicep Curls'] },
-                    { title: 'Legs Day', exercises: ['Barbell Squats', 'Romanian Deadlifts', 'Leg Extensions'] }
+                    { title: 'Push Day', exercises: ['Barbell Bench Press', 'Incline Dumbbell Press', 'Military Press', 'Tricep Pushdowns'] },
+                    { title: 'Pull Day', exercises: ['Pull-ups (weighted if possible)', 'Barbell Rows', 'Lat Pulldowns', 'Hammer Curls'] },
+                    { title: 'Legs Day', exercises: ['Barbell Squats', 'Romanian Deadlifts', 'Leg Press', 'Calf Raises'] }
                 ];
-                showWorkoutModal('Personalized Plans', 'This is a sample gym workout routine from our personalized plans, designed to build muscle and strength.', gymWorkout);
+                showWorkoutModal('Personalized Gym Plans', 'Our gym-based plans are designed to maximize muscle growth and strength using a variety of equipment.', gymWorkout);
             });
             
             calisthenicsCard.addEventListener('click', () => {
                 const bodyweightWorkout = [
-                    { title: 'Push Day', exercises: ['Push-ups', 'Dips', 'Handstand Push-ups'] },
-                    { title: 'Pull Day', exercises: ['Pull-ups', 'Chin-ups', 'Rows'] },
-                    { title: 'Legs Day', exercises: ['Pistol Squats', 'Lunges', 'Calf Raises'] }
+                    { title: 'Push Day', exercises: ['Decline Push-ups', 'Dips', 'Explosive Push-ups', 'Pseudo Planche Push-ups'] },
+                    { title: 'Pull Day', exercises: ['Pull-ups', 'Chin-ups', 'Australian Pull-ups', 'Hanging Leg Raises'] },
+                    { title: 'Legs Day', exercises: ['Pistol Squats', 'Bulgarian Split Squats', 'Jumping Lunges', 'Sissy Squats'] }
                 ];
-                showWorkoutModal('Calisthenics Training', 'This is a sample bodyweight workout routine from our calisthenics programs, focused on functional strength.', bodyweightWorkout);
+                showWorkoutModal('Calisthenics Training', 'Master your bodyweight with our functional training programs. Build incredible strength and a lean physique without any gym equipment.', bodyweightWorkout);
             });
 
             closeWorkoutModalButton.addEventListener('click', () => {
