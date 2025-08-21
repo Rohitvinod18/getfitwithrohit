@@ -10,7 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .hero-bg {
-            background-image: url('https://images.unsplash.com/photo-1549060278-f7c7562215c9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8fGVufDB8fHx8fA%3D%3D');
+            background-image: url('https://images.unsplash.com/photo-1549060278-f7c7562215c9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
             background-size: cover;
             background-position: center;
         }
@@ -82,7 +82,7 @@
                 <li><a href="#home" class="hover:text-lime-500 transition-colors duration-200">Home</a></li>
                 <li><a href="#features" class="hover:text-lime-500 transition-colors duration-200">Features</a></li>
                 <li><a href="#about" class="hover:text-lime-500 transition-colors duration-200">Trainer</a></li>
-                <li><a href="#bmi" class="hover:text-lime-500 transition-colors duration-200">BMI</a></li>
+                <li><a href="bmi.html" class="hover:text-lime-500 transition-colors duration-200">BMI</a></li>
                 <li><a href="#pricing" class="hover:text-lime-500 transition-colors duration-200">Pricing</a></li>
                 <li><a href="#contact" class="hover:text-lime-500 transition-colors duration-200">Contact</a></li>
             </ul>
@@ -99,7 +99,7 @@
                 <li><a href="#home" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Home</a></li>
                 <li><a href="#features" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Features</a></li>
                 <li><a href="#about" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Trainer</a></li>
-                <li><a href="#bmi" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">BMI</a></li>
+                <li><a href="bmi.html" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">BMI</a></li>
                 <li><a href="#pricing" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Pricing</a></li>
                 <li><a href="#contact" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Contact</a></li>
             </ul>
@@ -172,33 +172,6 @@
                             I specialize in crafting personalized workout and nutrition plans that are tailored to your unique needs and goals. Whether you're a beginner looking to build a foundation or an athlete aiming to master bodyweight movements, I am here to guide you every step of the way.
                         </p>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="bmi" class="py-20 md:py-28 bg-gray-900">
-            <div class="container mx-auto px-4 text-center">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">
-                    Calculate Your BMI
-                </h2>
-                <p class="text-center text-gray-400 max-w-xl mx-auto mb-12">
-                    Find out your Body Mass Index to understand your fitness level.
-                </p>
-                <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 max-w-lg mx-auto">
-                    <form id="bmi-form" class="space-y-6">
-                        <div>
-                            <label for="height" class="block text-lg font-medium text-gray-300 mb-2">Height (in cm)</label>
-                            <input type="number" id="height" name="height" required class="w-full rounded-md bg-gray-900 border-gray-700 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50 p-3">
-                        </div>
-                        <div>
-                            <label for="weight" class="block text-lg font-medium text-gray-300 mb-2">Weight (in kg)</label>
-                            <input type="number" id="weight" name="weight" required class="w-full rounded-md bg-gray-900 border-gray-700 text-white shadow-sm focus:border-lime-500 focus:ring focus:ring-lime-500 focus:ring-opacity-50 p-3">
-                        </div>
-                        <button type="submit" class="w-full cta-button text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
-                            Calculate BMI
-                        </button>
-                    </form>
-                    <div id="bmi-result" class="mt-8 text-white font-bold text-2xl hidden"></div>
                 </div>
             </div>
         </section>
@@ -415,45 +388,6 @@
                 messageBox.classList.add('bg-lime-500/20', 'text-lime-300');
                 
                 this.reset();
-            });
-
-            // BMI Calculator Logic
-            const bmiForm = document.getElementById('bmi-form');
-            const bmiResultDiv = document.getElementById('bmi-result');
-
-            bmiForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-                
-                const heightCm = document.getElementById('height').value;
-                const weightKg = document.getElementById('weight').value;
-
-                if (heightCm > 0 && weightKg > 0) {
-                    const heightM = heightCm / 100;
-                    const bmi = (weightKg / (heightM * heightM)).toFixed(2);
-                    let category = '';
-                    let color = '';
-
-                    if (bmi < 18.5) {
-                        category = 'Underweight';
-                        color = 'text-blue-400';
-                    } else if (bmi >= 18.5 && bmi < 24.9) {
-                        category = 'Normal weight';
-                        color = 'text-green-400';
-                    } else if (bmi >= 25 && bmi < 29.9) {
-                        category = 'Overweight';
-                        color = 'text-yellow-400';
-                    } else {
-                        category = 'Obese';
-                        color = 'text-red-400';
-                    }
-
-                    bmiResultDiv.innerHTML = `Your BMI is: <span class="${color}">${bmi}</span><br>Category: <span class="${color}">${category}</span>`;
-                    bmiResultDiv.classList.remove('hidden');
-
-                } else {
-                    bmiResultDiv.innerHTML = `<span class="text-red-400">Please enter valid height and weight.</span>`;
-                    bmiResultDiv.classList.remove('hidden');
-                }
             });
         });
     </script>
