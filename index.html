@@ -4,96 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GetFitWithRohit</title>
-    <!-- Use Inter font from Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS CDN for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f7f9fc;
-        }
-        /* Custom scroll-behavior for smooth scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
-        /* Style the CTA button with a subtle gradient and shadow */
-        .cta-button {
-            background-image: linear-gradient(to right, #22c55e, #10b981);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
-        }
-        /* SVG icons */
-        .svg-icon {
-            width: 24px;
-            height: 24px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-        /* Hide mobile menu by default */
-        .mobile-menu {
-            display: none;
-        }
-        /* Modal styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            visibility: hidden;
-            opacity: 0;
-            transition: visibility 0s, opacity 0.3s linear;
-        }
-        .modal-overlay.show {
-            visibility: visible;
-            opacity: 1;
-        }
-        .modal-content {
-            background-color: #111827;
-            padding: 2.5rem;
-            border-radius: 1rem;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            transform: scale(0.9);
-            transition: transform 0.3s ease-in-out;
-        }
-        .modal-overlay.show .modal-content {
-            transform: scale(1);
-        }
-        /* Hero section background image and overlay */
-        .hero-bg {
-            background-image: url('http://googleusercontent.com/file_content/1');
-            background-size: cover;
-            background-position: center;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-gray-950 text-gray-200">
 
-    <!-- Header Section -->
     <header class="bg-gray-950 sticky top-0 z-50 shadow-md">
         <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <!-- Logo -->
             <a href="#" class="text-2xl font-bold text-gray-50">
                 GetFitWithRohit
             </a>
 
-            <!-- Desktop Navigation -->
             <ul class="hidden md:flex space-x-8 text-lg font-medium">
                 <li><a href="#home" class="hover:text-lime-500 transition-colors duration-200">Home</a></li>
                 <li><a href="#features" class="hover:text-lime-500 transition-colors duration-200">Features</a></li>
@@ -102,7 +26,6 @@
                 <li><a href="#contact" class="hover:text-lime-500 transition-colors duration-200">Contact</a></li>
             </ul>
 
-            <!-- Mobile Menu Button (Hamburger) -->
             <button id="mobile-menu-button" class="md:hidden p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-lime-500">
                 <svg class="svg-icon w-6 h-6" viewBox="0 0 24 24" stroke="#e2e8f0" fill="none">
                     <path d="M4 6h16M4 12h16m-7 6h7"></path>
@@ -110,7 +33,6 @@
             </button>
         </nav>
 
-        <!-- Mobile Menu (Hidden by default) -->
         <div id="mobile-menu" class="mobile-menu md:hidden bg-gray-900 shadow-md rounded-b-xl pb-4">
             <ul class="flex flex-col items-center space-y-4 text-lg font-medium pt-4">
                 <li><a href="#home" class="block py-2 px-4 hover:text-lime-500 transition-colors duration-200">Home</a></li>
@@ -122,10 +44,8 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
     <main>
         <section id="home" class="relative hero-bg py-24 md:py-32 text-center text-white">
-            <!-- Overlay to darken image and improve text readability -->
             <div class="absolute inset-0 bg-black/50"></div>
             <div class="container mx-auto px-4 relative z-10">
                 <h1 class="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4">
@@ -137,7 +57,6 @@
             </div>
         </section>
 
-        <!-- Features Section -->
         <section id="features" class="py-20 md:py-28 bg-gray-900">
             <div class="container mx-auto px-4">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 text-white">
@@ -147,7 +66,6 @@
                     We're committed to providing the best tools and support for your fitness journey.
                 </p>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                    <!-- Feature Card 1: Personalized Plans -->
                     <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 hover:scale-105 transition-transform duration-300">
                         <div class="text-lime-500 mb-4">
                             <svg class="w-12 h-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -160,12 +78,11 @@
                         </p>
                     </div>
 
-                    <!-- Feature Card 2: Calisthenics Training -->
                     <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 hover:scale-105 transition-transform duration-300">
                         <div class="text-lime-500 mb-4">
                              <svg class="w-12 h-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M17 11h.01"></path>
-                            </svg>
+                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M17 11h.01"></path>
+                             </svg>
                         </div>
                         <h3 class="text-xl font-semibold mb-2 text-white text-center">Calisthenics Training</h3>
                         <p class="text-gray-400 text-center">
@@ -176,7 +93,6 @@
             </div>
         </section>
 
-        <!-- About the Trainer Section -->
         <section id="about" class="py-20 md:py-28 bg-gray-950">
             <div class="container mx-auto px-4 text-center">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">
@@ -184,7 +100,7 @@
                 </h2>
                 <div class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-12">
                     <div class="w-64 h-64 rounded-full overflow-hidden border-4 border-lime-500 shadow-xl flex-shrink-0">
-                        <img src="http://googleusercontent.com/file_content/2" alt="Trainer Rohit" class="w-full h-full object-cover">
+                        <img src="./images/rohit.jpg" alt="Trainer Rohit" class="w-full h-full object-cover">
                     </div>
                     <div class="md:w-1/2 text-left">
                         <p class="text-gray-300">
@@ -198,7 +114,6 @@
             </div>
         </section>
 
-        <!-- Pricing Section -->
         <section id="pricing" class="py-20 md:py-28 bg-gray-900">
             <div class="container mx-auto px-4 text-center">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">
@@ -209,7 +124,6 @@
                 </p>
 
                 <div class="flex flex-col md:flex-row justify-center items-center md:space-x-8 space-y-8 md:space-y-0">
-                    <!-- Pricing Card 1 -->
                     <div class="bg-gray-800 p-8 rounded-xl shadow-lg w-full md:w-1/3 border border-gray-700 transform hover:scale-105 transition-transform duration-300">
                         <h3 class="text-2xl font-bold mb-2 text-white">Starter Pack</h3>
                         <p class="text-gray-400 mb-6">For beginners getting started</p>
@@ -222,7 +136,6 @@
                         <button class="open-modal w-full cta-button text-gray-900 py-3 rounded-full font-bold">GET IT</button>
                     </div>
 
-                    <!-- Pricing Card 2 (Featured) -->
                     <div class="bg-gray-700 text-white p-8 rounded-xl shadow-2xl w-full md:w-1/3 border border-lime-500 transform hover:scale-105 transition-transform duration-300 scale-100 md:scale-105">
                         <h3 class="text-2xl font-bold mb-2">Advanced Training</h3>
                         <p class="text-gray-300 mb-6">For committed individuals</p>
@@ -236,7 +149,6 @@
                         <button class="open-modal w-full bg-lime-500 text-gray-900 py-3 rounded-full font-bold cta-button">GET IT</button>
                     </div>
 
-                    <!-- Pricing Card 3 -->
                     <div class="bg-gray-800 p-8 rounded-xl shadow-lg w-full md:w-1/3 border border-gray-700 transform hover:scale-105 transition-transform duration-300">
                         <h3 class="text-2xl font-bold mb-2 text-white">Small Group Training</h3>
                         <p class="text-gray-400 mb-6">For corporate and group training</p>
@@ -252,7 +164,6 @@
             </div>
         </section>
 
-        <!-- Call to Action Section -->
         <section id="contact" class="bg-lime-500 text-gray-900 py-16">
             <div class="container mx-auto px-4 text-center">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4">
@@ -261,19 +172,15 @@
                 <p class="text-lg text-gray-700 max-w-xl mx-auto mb-8">
                     Join our community and transform your life with the support of our expert trainers.
                 </p>
-                <!-- New contact details with icons -->
                 <div class="flex flex-col items-center space-y-4">
-                    <!-- Email -->
                     <a href="mailto:rohitvinod29@gmail.com" class="flex items-center text-gray-900 font-bold hover:text-gray-700 transition-colors duration-200">
                         <svg class="svg-icon w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                         rohitvinod29@gmail.com
                     </a>
-                    <!-- Phone -->
                     <a href="tel:+919567434602" class="flex items-center text-gray-900 font-bold hover:text-gray-700 transition-colors duration-200">
                         <svg class="svg-icon w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2 2h-11a2 2 0 01-2-2v-3a2 2 0 012-2h11a2 2 0 012 2z"></path><path d="M11 5a2 2 0 012-2h10a2 2 0 012 2v3a2 2 0 01-2 2h-10a2 2 0 01-2-2V5z"></path></svg>
                         +91 9567434602
                     </a>
-                    <!-- Instagram -->
                     <a href="https://instagram.com/rohit__vinod" target="_blank" class="flex items-center text-gray-900 font-bold hover:text-gray-700 transition-colors duration-200">
                         <svg class="svg-icon w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37a4 4 0 11-8 0 4 4 0 018 0z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                         @rohit__vinod
@@ -284,7 +191,6 @@
 
     </main>
 
-    <!-- Modal for the contact form -->
     <div id="contact-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="flex justify-between items-center mb-6">
@@ -336,17 +242,14 @@
                     Submit Details
                 </button>
             </form>
-            <!-- Message box for success/error -->
             <div id="message-box" class="mt-4 p-4 rounded-md text-sm hidden"></div>
         </div>
     </div>
 
-    <!-- Footer Section -->
     <footer class="bg-gray-950 text-gray-300 py-12">
         <div class="container mx-auto px-4 text-center">
             <p class="text-sm">&copy; 2025 GetFitWithRohit. All Rights Reserved.</p>
             <div class="flex justify-center space-x-6 mt-4">
-                <!-- Social Media Icons (placeholders) -->
                 <a href="#" class="hover:text-white transition-colors duration-200">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M22 6.5c-0.8 0.4-1.6 0.7-2.4 0.9 0.9-0.6 1.6-1.5 1.9-2.6-0.9 0.5-1.9 0.9-3 1.1-0.9-0.9-2.2-1.5-3.6-1.5-2.7 0-4.9 2.2-4.9 4.9 0 0.4 0.1 0.8 0.1 1.2-4.1-0.2-7.7-2.2-10.1-5.2-0.4 0.8-0.6 1.7-0.6 2.7 0 1.7 0.9 3.2 2.2 4.1-0.8-0.03-1.6-0.2-2.3-0.6v0.1c0 2.4 1.7 4.4 4 4.8-0.4 0.1-0.9 0.2-1.4 0.2-0.3 0-0.7-0.03-1-0.1 0.6 2 2.5 3.5 4.7 3.5-1.7 1.3-3.8 2.1-6.1 2.1-0.4 0-0.8-0.02-1.1-0.1 2.2 1.4 4.8 2.2 7.6 2.2 9.2 0 14.3-7.7 14.3-14.3 0-0.2 0-0.5-0.01-0.7 1-0.7 1.9-1.5 2.6-2.5z"></path>
@@ -366,77 +269,6 @@
         </div>
     </footer>
 
-    <!-- JavaScript for Mobile Menu and Smooth Scrolling and Modal -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Mobile Menu functionality
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.style.display = mobileMenu.style.display === 'block' ? 'none' : 'block';
-            });
-
-            // Smooth scrolling for navigation links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                    if (mobileMenu.style.display === 'block') {
-                        mobileMenu.style.display = 'none';
-                    }
-                });
-            });
-
-            // Modal functionality
-            const modalOverlay = document.getElementById('contact-modal');
-            const closeModalButton = document.getElementById('close-modal');
-            const openModalButtons = document.querySelectorAll('.open-modal');
-            const contactForm = document.getElementById('contact-form');
-            const messageBox = document.getElementById('message-box');
-
-            // Function to show the modal
-            openModalButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    modalOverlay.classList.add('show');
-                });
-            });
-
-            // Function to hide the modal
-            closeModalButton.addEventListener('click', () => {
-                modalOverlay.classList.remove('show');
-                messageBox.classList.add('hidden');
-            });
-
-            // Close modal when clicking outside the content
-            modalOverlay.addEventListener('click', (e) => {
-                if (e.target === modalOverlay) {
-                    modalOverlay.classList.remove('show');
-                    messageBox.classList.add('hidden');
-                }
-            });
-
-            // Handle form submission
-            contactForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const formData = new FormData(contactForm);
-                const data = Object.fromEntries(formData.entries());
-                
-                // Log the data to the console
-                console.log('Submitted Form Data:', data);
-                
-                // Show a success message
-                messageBox.textContent = 'Thank you! Your details have been submitted. I will get in touch with you shortly.';
-                messageBox.classList.remove('hidden');
-                messageBox.classList.add('bg-green-700', 'text-white');
-                
-                // Reset the form after submission
-                contactForm.reset();
-            });
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
-s
